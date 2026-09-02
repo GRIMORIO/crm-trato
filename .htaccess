@@ -1,0 +1,15 @@
+# Herramienta interna del CRM B2B de TIPS — nunca debe indexarse ni rastrearse.
+<IfModule mod_headers.c>
+    Header set X-Robots-Tag "noindex, nofollow, noarchive, nosnippet"
+</IfModule>
+
+# No exponer archivos sensibles si quedaran sueltos por error
+<FilesMatch "\.(sql|log|md)$">
+    Require all denied
+</FilesMatch>
+
+<Files "config.php">
+    <RequireAll>
+        Require all denied
+    </RequireAll>
+</Files>

@@ -1,0 +1,31 @@
+# ─────────────────────────────────────────────────────────────
+# Configuración con secretos reales — NUNCA se commitea.
+# Copiá config.example.php a config.php y completá tus credenciales.
+# ─────────────────────────────────────────────────────────────
+config.php
+config.production.php
+config.local.php
+
+# Subidas de usuarios (documentos, adjuntos)
+uploads/*
+!uploads/.gitkeep
+
+# Dumps y migraciones de datos
+*.sql
+dump.sql
+_migrate.php
+
+# Logs y temporales
+*.log
+*.cache
+error_log
+php_errorlog
+
+# Sistema operativo / editores
+.DS_Store
+Thumbs.db
+desktop.ini
+.vscode/
+.idea/
+*.swp
+*~
