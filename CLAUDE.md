@@ -1,6 +1,6 @@
 # CLAUDE.md — CRM interno TIPS (crm-tips)
 
-Herramienta de gestión comercial B2B construida para TIPS (equipo/insumos de cocina, Costa Rica). Vive en `proyectos/crm-tips/` porque es una herramienta hecha *para* ese cliente, distinta de `proyectos/tips/` (el engagement de marketing/SEO/growth). `agencia/crm/` es un fork independiente adaptado para uso interno de la propia consultora — nunca mezclar los dos, ver la nota de aislamiento en `agencia/crm/CLAUDE.md`.
+Herramienta de gestión comercial B2B construida para TIPS (equipo/insumos de cocina, Costa Rica). Vive en `proyectos/crm-tips/` porque es una herramienta hecha *para* ese cliente, distinta de `clientes/tips/` (el engagement de marketing/SEO/growth). `agencia/crm/` es un fork independiente adaptado para uso interno de la propia consultora — nunca mezclar los dos, ver la nota de aislamiento en `agencia/crm/CLAUDE.md`.
 
 ## Producción (2026-08-25)
 
