@@ -81,7 +81,7 @@ $recent_deals = $stmt_recent_deals->fetchAll();
 <!-- Estado Minimizado -->
 <div id="coach-banner-collapsed" style="display: none; background: rgba(6, 182, 212, 0.05); border: 1px solid rgba(6, 182, 212, 0.15); border-radius: 8px; padding: 0.5rem 1rem; margin-bottom: 1.5rem; align-items: center; justify-content: space-between; gap: 1rem;">
     <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-muted);">
-        <span style="background: linear-gradient(135deg, #06b6d4, #a855f7); width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff !important; font-weight: 800; font-size: 0.5rem; flex-shrink:0;" title="<?php echo htmlspecialchars($random_tip['author']); ?>"><?php echo $initials; ?></span>
+        <span style="background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff !important; font-weight: 800; font-size: 0.5rem; flex-shrink:0;" title="<?php echo htmlspecialchars($random_tip['author']); ?>"><?php echo $initials; ?></span>
         <span>💡 El <strong>Sales Coach (<?php echo htmlspecialchars($random_tip['author']); ?>)</strong> está listo para guiarte en tus metas del mes.</span>
     </div>
     <button onclick="toggleCoachBanner(false)" class="btn-action btn-sm" style="padding: 2px 8px; font-size: 0.7rem; border-color: rgba(6, 182, 212, 0.3); background: rgba(6, 182, 212, 0.1); color: var(--color-primary);">Expandir Coach</button>
@@ -90,7 +90,7 @@ $recent_deals = $stmt_recent_deals->fetchAll();
 <!-- Estado Maximizado -->
 <div id="coach-banner-expanded" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.08), rgba(168, 85, 247, 0.08)); border: 1px solid rgba(6, 182, 212, 0.2); border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; position: relative;">
     <div style="display: flex; align-items: center; gap: 1.25rem; flex: 1;">
-        <div style="background: linear-gradient(135deg, #06b6d4, #a855f7); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff !important; font-weight: 800; font-size: 1rem; box-shadow: 0 4px 10px rgba(6,182,212,0.3); flex-shrink: 0;" title="<?php echo htmlspecialchars($random_tip['author']); ?>">
+        <div style="background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff !important; font-weight: 800; font-size: 1rem; box-shadow: 0 4px 10px rgba(6,182,212,0.3); flex-shrink: 0;" title="<?php echo htmlspecialchars($random_tip['author']); ?>">
             <?php echo $initials; ?>
         </div>
         <div>

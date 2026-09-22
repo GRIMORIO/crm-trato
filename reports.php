@@ -135,7 +135,7 @@ $forecast_target_pct = min(100, round(($total_forecast_val / $monthly_target) * 
             <span style="font-size:0.85rem; color:var(--text-dark); font-weight:500;">/ $<?php echo number_format($monthly_target, 0); ?></span>
         </div>
         <div style="width:100%; height:8px; background:rgba(255,255,255,0.05); border-radius:999px; margin: 0.75rem 0; overflow:hidden;">
-            <div style="width: <?php echo $forecast_target_pct; ?>%; height:100%; background:linear-gradient(to right, var(--color-primary), #a855f7); border-radius:999px;"></div>
+            <div style="width: <?php echo $forecast_target_pct; ?>%; height:100%; background:linear-gradient(to right, var(--color-primary), var(--color-secondary)); border-radius:999px;"></div>
         </div>
         <div class="flex-between" style="font-size:0.75rem;">
             <span style="color:var(--text-muted);"><?php echo $forecast_target_pct; ?>% Proyectado</span>

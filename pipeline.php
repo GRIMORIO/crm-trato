@@ -208,10 +208,10 @@ foreach ($deals as $deal) {
                         <div style="margin-top:0.5rem;" title="Score de Calificación: <?php echo $total_score; ?>%">
                             <div style="display:flex; justify-content:space-between; font-size:0.7rem; color:var(--text-muted); margin-bottom:0.15rem;">
                                 <span>Calificación</span>
-                                <span style="font-weight:600; color:#06b6d4; margin-left:auto;"><?php echo $total_score; ?>%</span>
+                                <span style="font-weight:600; color:var(--color-primary); margin-left:auto;"><?php echo $total_score; ?>%</span>
                             </div>
-                            <div style="width:100%; height:4px; background:rgba(255,255,255,0.05); border-radius:2px; overflow:hidden;">
-                                <div style="width:<?php echo $total_score; ?>%; height:100%; background:linear-gradient(90deg, #a855f7, #06b6d4); border-radius:2px;"></div>
+                            <div style="width:100%; height:4px; background:rgba(148,163,184,0.15); border-radius:2px; overflow:hidden;">
+                                <div style="width:<?php echo $total_score; ?>%; height:100%; background:linear-gradient(90deg, var(--color-secondary), var(--color-primary)); border-radius:2px;"></div>
                             </div>
                         </div>
 
@@ -398,7 +398,7 @@ foreach ($deals as $deal) {
         
         <!-- SALES COACH DE BRIAN TRACY CONTEXTUAL -->
         <div id="modal-sales-coach-container" style="margin-top: 1.5rem; background: linear-gradient(135deg, rgba(6, 182, 212, 0.08), rgba(168, 85, 247, 0.08)); border: 1px solid rgba(6, 182, 212, 0.2); border-radius: 8px; padding: 1rem; display: flex; align-items: center; gap: 1rem;">
-            <div style="background: linear-gradient(135deg, #06b6d4, #a855f7); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff !important; font-weight: 800; font-size: 0.75rem; flex-shrink:0;">
+            <div style="background: linear-gradient(135deg, var(--color-primary), var(--color-secondary)); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff !important; font-weight: 800; font-size: 0.75rem; flex-shrink:0;">
                 BT
             </div>
             <div>

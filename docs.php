@@ -56,8 +56,8 @@ require_once __DIR__ . '/includes/header.php';
         <!-- Pestañas informativas o columnas -->
         <div style="display:grid; grid-template-columns: 1fr 1fr; gap:2rem; margin-bottom:1.5rem;">
             <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); padding:1.25rem; border-radius:10px;">
-                <h3 style="color:#06b6d4; font-size:1.1rem; margin-bottom:0.75rem; font-weight:600; display:flex; align-items:center; gap:0.5rem;">
-                    <span style="background:rgba(6,182,212,0.15); padding:0.2rem 0.5rem; border-radius:4px; font-weight:800;">BANT</span>
+                <h3 style="color:var(--color-primary); font-size:1.1rem; margin-bottom:0.75rem; font-weight:600; display:flex; align-items:center; gap:0.5rem;">
+                    <span style="background:rgba(var(--color-primary-rgb),0.15); padding:0.2rem 0.5rem; border-radius:4px; font-weight:800;">BANT</span>
                     Marco Clásico (Transaccional)
                 </h3>
                 <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem;">
@@ -72,8 +72,8 @@ require_once __DIR__ . '/includes/header.php';
             </div>
 
             <div style="background:rgba(255,255,255,0.02); border:1px solid var(--border-color); padding:1.25rem; border-radius:10px;">
-                <h3 style="color:#a855f7; font-size:1.1rem; margin-bottom:0.75rem; font-weight:600; display:flex; align-items:center; gap:0.5rem;">
-                    <span style="background:rgba(168,85,247,0.15); padding:0.2rem 0.5rem; border-radius:4px; font-weight:800;">MEDDIC</span>
+                <h3 style="color:var(--color-secondary); font-size:1.1rem; margin-bottom:0.75rem; font-weight:600; display:flex; align-items:center; gap:0.5rem;">
+                    <span style="background:rgba(var(--color-secondary-rgb),0.15); padding:0.2rem 0.5rem; border-radius:4px; font-weight:800;">MEDDIC</span>
                     Marco Complejo (B2B Corporativo)
                 </h3>
                 <p style="color:var(--text-muted); font-size:0.85rem; margin-bottom:1rem;">
