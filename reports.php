@@ -25,7 +25,7 @@ if ($restriction !== '') {
     $status_stmt->execute([$restriction]);
     $status_data = $status_stmt->fetchAll();
 
-    // 2. Obtener distribución por Etapa del Embudo (filtrado por asesor)
+    // 2. Obtener distribución por Etapa del Pipeline (filtrado por asesor)
     $stage_stmt = $pdo->prepare("
         SELECT s.name AS stage_name, COUNT(d.id) AS deal_count, IFNULL(SUM(d.value), 0) AS total_val
         FROM stages s
@@ -53,7 +53,7 @@ if ($restriction !== '') {
         GROUP BY status
     ")->fetchAll();
 
-    // 2. Obtener distribución por Etapa del Embudo (administrador)
+    // 2. Obtener distribución por Etapa del Pipeline (administrador)
     $stage_dist = $pdo->query("
         SELECT s.name AS stage_name, COUNT(d.id) AS deal_count, IFNULL(SUM(d.value), 0) AS total_val
         FROM stages s

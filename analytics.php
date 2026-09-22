@@ -1,6 +1,6 @@
 <?php
 /**
- * analytics.php — Analítica del embudo de ventas (Fase 1).
+ * analytics.php — Analítica del pipeline de ventas (Fase 1).
  *
  * Tres bloques:
  *   1. Volumen histórico  — leads / oportunidades / cuentas y flujo por etapa.
@@ -87,7 +87,7 @@ $flow_open = array_map(fn($r) => $r['open_count'], $R['stage_rows']);
     </div>
     <?php if ($pipelines): ?>
     <div class="form-group" style="margin-bottom:0;">
-        <label for="pipeline_id">Embudo</label>
+        <label for="pipeline_id">Pipeline</label>
         <select name="pipeline_id" id="pipeline_id">
             <?php foreach ($pipelines as $p): ?>
                 <option value="<?php echo $p['id']; ?>" <?php echo $pipeline_id == $p['id'] ? 'selected' : ''; ?>><?php echo htmlspecialchars($p['name']); ?></option>
@@ -97,7 +97,7 @@ $flow_open = array_map(fn($r) => $r['open_count'], $R['stage_rows']);
     <?php endif; ?>
     <button type="submit" class="btn-submit" style="width:auto; padding:0.6rem 1.4rem;">Aplicar</button>
     <span style="color:var(--text-muted); font-size:0.8rem; margin-left:auto;">
-        <?php echo htmlspecialchars($from); ?> → <?php echo htmlspecialchars($to); ?> · <?php echo $R['meta']['n_deals']; ?> negocios en el embudo
+        <?php echo htmlspecialchars($from); ?> → <?php echo htmlspecialchars($to); ?> · <?php echo $R['meta']['n_deals']; ?> negocios en el pipeline
     </span>
 </form>
 
@@ -106,7 +106,7 @@ $flow_open = array_map(fn($r) => $r['open_count'], $R['stage_rows']);
     <strong style="color:#f59e0b;">⚠️ Sin historial de fases</strong>
     <p style="color:var(--text-muted); font-size:0.875rem; margin-top:0.5rem;">
         La tabla <code>deal_stage_history</code> no existe o está vacía. Se muestra solo la ocupación
-        actual del embudo y los cierres del período. Corré <code>update_deal_stage_history.php</code>
+        actual del pipeline y los cierres del período. Corré <code>update_deal_stage_history.php</code>
         una vez para habilitar conversión de cohorte y tiempo entre etapas.
     </p>
 </div>

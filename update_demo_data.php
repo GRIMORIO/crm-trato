@@ -31,7 +31,7 @@ try {
 
     // 4. Deals de Prueba
     $deals_data = [
-        // EMBUDO 1: VENTAS PRINCIPAL
+        // PIPELINE 1: VENTAS PRINCIPAL
         [
             'title' => 'Contrato Anual Suministro Fondant Spoon',
             'value' => 18400.00,
@@ -141,7 +141,7 @@ try {
             ]
         ],
 
-        // EMBUDO 2: LOGÍSTICA Y DESPACHO
+        // PIPELINE 2: LOGÍSTICA Y DESPACHO
         [
             'title' => 'Despacho Batidoras Musmanni',
             'value' => 6250.00,

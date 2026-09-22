@@ -103,7 +103,7 @@ try {
     echo "<div class='step success'>✔️ Datos semilla de calificación BANT aplicados.</div>";
 
     echo "<p style='margin-top: 1.5rem; color: #10b981; font-weight: 600;'>¡Calificación BANT integrada con éxito en la base de datos!</p>";
-    echo "<a href='pipeline.php' class='btn-go'>Ir al Embudo Kanban</a>";
+    echo "<a href='pipeline.php' class='btn-go'>Ir al Pipeline Kanban</a>";
 
 } catch (Exception $e) {
     echo "<div class='step' style='border-left-color: #ef4444; color: #fca5a5;'>❌ Error durante la actualización: " . $e->getMessage() . "</div>";

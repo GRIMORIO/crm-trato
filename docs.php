@@ -35,7 +35,7 @@ require_once __DIR__ . '/includes/header.php';
                     <li><code>accounts</code>: Empresas y cuentas comerciales B2B.</li>
                     <li><code>contacts</code>: Personas físicas decisoras vinculadas a empresas.</li>
                     <li><code>deals</code>: Oportunidades comerciales con montos y estados.</li>
-                    <li><code>stages</code>: Etapas del embudo visual.</li>
+                    <li><code>stages</code>: Etapas del pipeline visual.</li>
                     <li><code>activities</code>: Tareas programadas (Llamadas, Reuniones, Correos).</li>
                     <li><code>web_forms</code>, <code>live_chats</code>, <code>chat_messages</code>: Módulo de Leads y Chat.</li>
                     <li><code>emails</code>: Historial de correspondencia SMTP/IMAP simulada.</li>
@@ -92,7 +92,7 @@ require_once __DIR__ . '/includes/header.php';
 
         <div style="background:rgba(6, 182, 212, 0.05); border:1px solid rgba(6, 182, 212, 0.15); padding:1rem; border-radius:8px; font-size:0.875rem; color:var(--text-main);">
             <strong>📌 Operación del Sistema:</strong> 
-            El administrador puede alternar el método activo en <a href="settings.php">Configuración > Lead Scoring</a>. Esto cambia automáticamente los indicadores en el <a href="pipeline.php">Embudo de Ventas</a> (letras interactivas sobre cada tarjeta de trato), actualiza los pesos aplicados al Lead Scoring global y adapta el Sales Coach de Brian Tracy en tiempo real.
+            El administrador puede alternar el método activo en <a href="settings.php">Configuración > Lead Scoring</a>. Esto cambia automáticamente los indicadores en el <a href="pipeline.php">Pipeline de Ventas</a> (letras interactivas sobre cada tarjeta de trato), actualiza los pesos aplicados al Lead Scoring global y adapta el Sales Coach de Brian Tracy en tiempo real.
         </div>
     </div>
     </div>
@@ -107,7 +107,7 @@ require_once __DIR__ . '/includes/header.php';
             <div>
                 <h3 style="color:#fff; font-size:1rem; margin-bottom:0.5rem; font-weight:600;">A. Formularios Web Incrustables</h3>
                 <p style="color:var(--text-muted); margin-bottom:1rem;">
-                    El <a href="form_builder.php">Constructor de Formularios</a> te permite generar formularios rápidos para tus landing pages de TIPS. Copiando el código de iframe generado, los prospectos alimentan de inmediato el embudo.
+                    El <a href="form_builder.php">Constructor de Formularios</a> te permite generar formularios rápidos para tus landing pages de TIPS. Copiando el código de iframe generado, los prospectos alimentan de inmediato el pipeline.
                 </p>
                 <div style="background:rgba(0,0,0,0.3); border:1px solid var(--border-color); padding:0.75rem; border-radius:6px; font-family:monospace; font-size:0.75rem; color:var(--color-primary); overflow-x:auto;">
                     &lt;iframe src="http://localhost/proyectos/crm-tips/form_embed.php?id=1" width="100%" height="450px" frameborder="0"&gt;&lt;/iframe&gt;
@@ -225,7 +225,7 @@ require_once __DIR__ . '/includes/header.php';
                 <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.25rem;">
                     Cualquier persona o negocio del que se capturaron datos de contacto, sin filtrar todavía. Puede venir de un formulario web, del chat con IA de la tienda, de una feria del sector, de un referido o de una base de datos de outbound del asesor.
                     <br><em style="color:var(--text-muted);">Criterio de entrada:</em> hay un nombre de negocio y una forma de contactarlo.
-                    <br><em style="color:var(--text-muted);">Dueño:</em> Marketing / punto de entrada. &nbsp;<em style="color:var(--text-muted);">En el CRM:</em> registros de <code>web_forms</code> / <code>live_chats</code>, o un deal en la primera etapa del embudo (<em>Contacto Inicial</em>).
+                    <br><em style="color:var(--text-muted);">Dueño:</em> Marketing / punto de entrada. &nbsp;<em style="color:var(--text-muted);">En el CRM:</em> registros de <code>web_forms</code> / <code>live_chats</code>, o un deal en la primera etapa del pipeline (<em>Contacto Inicial</em>).
                 </p>
             </div>
             <div style="border-left:3px solid var(--color-secondary); padding-left:1rem;">
@@ -248,7 +248,7 @@ require_once __DIR__ . '/includes/header.php';
                 <strong style="color:#fff;">SQL — Sales Qualified Lead (Oportunidad)</strong>
                 <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.25rem;">
                     Tras el primer contacto, el asesor calificó el lead con el marco activo — <strong>BANT</strong> (compra recurrente / equipo estándar) o <strong>MEDDIC</strong> (equipamiento pesado / licitación) — y lo convirtió en una <strong>oportunidad real</strong>: hay presupuesto, la persona que decide en la mesa, un dolor concreto en su cocina/operación y una fecha de compra. Recién aquí se arma la cotización formal.
-                    <br><em style="color:var(--text-muted);">Criterio de entrada:</em> las letras del marco activo confirmadas (visibles en la tarjeta del embudo) — no antes.
+                    <br><em style="color:var(--text-muted);">Criterio de entrada:</em> las letras del marco activo confirmadas (visibles en la tarjeta del pipeline) — no antes.
                     <br><em style="color:var(--text-muted);">Dueño:</em> Asesor de zona. &nbsp;<em style="color:var(--text-muted);">En el CRM:</em> deal con el Lead Scoring alto y la insignia de calificación; avanza por <em>Propuesta Comercial</em> y <em>Negociación y Cierre</em>.
                 </p>
             </div>
@@ -256,7 +256,7 @@ require_once __DIR__ . '/includes/header.php';
                 <strong style="color:#fff;">Cerrado - Ganado</strong>
                 <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.25rem;">
                     La oportunidad se cerró: orden de compra firmada o pedido confirmado. Registrar siempre qué se vendió y por cuánto. Aquí arranca la relación de cuenta: reposición, cross-sell de otras líneas, y el asesor como contacto de servicio.
-                    <br><em style="color:var(--text-muted);">En el CRM:</em> es el campo <code>status = 'Won'</code> del deal, <u>no</u> una etapa del embudo.
+                    <br><em style="color:var(--text-muted);">En el CRM:</em> es el campo <code>status = 'Won'</code> del deal, <u>no</u> una etapa del pipeline.
                 </p>
             </div>
             <div style="border-left:3px solid #ef4444; padding-left:1rem;">
@@ -269,7 +269,7 @@ require_once __DIR__ . '/includes/header.php';
         </div>
 
         <div style="background:rgba(6, 182, 212, 0.05); border:1px solid rgba(6, 182, 212, 0.15); padding:1rem; border-radius:8px; font-size:0.85rem; margin-top:1.5rem;">
-            <strong>📌 Perdido ≠ Descalificado.</strong> Un lead que <strong>nunca llegó a SQL</strong> porque hoy no tiene presupuesto o no es temporada de compra no es una oportunidad perdida — es un <strong>descalificado / seguimiento</strong>: sale del embudo activo pero se guarda para retomarlo (arranca temporada alta, abre un local nuevo, cambia el encargado de compras). "Cerrado - Perdido" se reserva para oportunidades que <em>sí</em> estaban calificadas y se cayeron; mezclarlas distorsiona la tasa de cierre de cada asesor.
+            <strong>📌 Perdido ≠ Descalificado.</strong> Un lead que <strong>nunca llegó a SQL</strong> porque hoy no tiene presupuesto o no es temporada de compra no es una oportunidad perdida — es un <strong>descalificado / seguimiento</strong>: sale del pipeline activo pero se guarda para retomarlo (arranca temporada alta, abre un local nuevo, cambia el encargado de compras). "Cerrado - Perdido" se reserva para oportunidades que <em>sí</em> estaban calificadas y se cayeron; mezclarlas distorsiona la tasa de cierre de cada asesor.
         </div>
     </div>
 
@@ -294,7 +294,7 @@ require_once __DIR__ . '/includes/header.php';
                     </div>
                     <div>
                         <strong style="color:var(--color-primary);">C — Cerrado - Ganado / Cerrado - Perdido</strong>
-                        <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.25rem;">Estados finales de una oportunidad. En el CRM son el campo <code>status</code> del deal (<code>Won</code> / <code>Lost</code>), no etapas del embudo. "Perdido" exige un motivo y nunca implica borrar el deal; "Ganado" abre la gestión de cuenta.</p>
+                        <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.25rem;">Estados finales de una oportunidad. En el CRM son el campo <code>status</code> del deal (<code>Won</code> / <code>Lost</code>), no etapas del pipeline. "Perdido" exige un motivo y nunca implica borrar el deal; "Ganado" abre la gestión de cuenta.</p>
                     </div>
                     <div>
                         <strong style="color:var(--color-primary);">C — Comité de compras (Buying Committee)</strong>
@@ -306,7 +306,7 @@ require_once __DIR__ . '/includes/header.php';
                     </div>
                     <div>
                         <strong style="color:var(--color-primary);">D — Deal (Negocio / Oportunidad)</strong>
-                        <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.25rem;">Una oportunidad de venta abierta en el CRM, con valor monetario y fecha de cierre estimada. Puede vivir en cualquiera de los embudos configurados.</p>
+                        <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.25rem;">Una oportunidad de venta abierta en el CRM, con valor monetario y fecha de cierre estimada. Puede vivir en cualquiera de los pipelines configurados.</p>
                     </div>
                     <div>
                         <strong style="color:var(--color-primary);">E — Evaluación de opciones</strong>
@@ -330,15 +330,15 @@ require_once __DIR__ . '/includes/header.php';
                     </div>
                     <div>
                         <strong style="color:var(--color-primary);">N — Negociación</strong>
-                        <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.25rem;">Fase final antes del cierre: el cliente respondió con una objeción de precio, pidió ajustar cantidades/condiciones o comparó con una contraoferta. Es una etapa del embudo (<em>Negociación y Cierre</em>). Riesgo si se estanca ahí sin una fecha concreta de decisión.</p>
+                        <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.25rem;">Fase final antes del cierre: el cliente respondió con una objeción de precio, pidió ajustar cantidades/condiciones o comparó con una contraoferta. Es una etapa del pipeline (<em>Negociación y Cierre</em>). Riesgo si se estanca ahí sin una fecha concreta de decisión.</p>
                     </div>
                     <div>
-                        <strong style="color:var(--color-primary);">P — Pipeline (Embudo de Ventas)</strong>
-                        <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.25rem;">El flujo visual en el que se ordenan y gestionan las oportunidades a través de sus etapas. TIPS CRM admite varios embudos en paralelo (ej. insumos vs. equipamiento).</p>
+                        <strong style="color:var(--color-primary);">P — Pipeline (Pipeline de Ventas)</strong>
+                        <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.25rem;">El flujo visual en el que se ordenan y gestionan las oportunidades a través de sus etapas. TIPS CRM admite varios pipelines en paralelo (ej. insumos vs. equipamiento).</p>
                     </div>
                     <div>
                         <strong style="color:var(--color-primary);">R — Reconocimiento de necesidades</strong>
-                        <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.25rem;">Primera fase del proceso de compra del cliente: se da cuenta de que necesita reponer un insumo, cambiar un equipo que falla o abastecer un local nuevo. La prospección y el contenido de la parte alta del embudo existen para llegar justo en ese momento. Se corresponde con el paso de <strong>Lead</strong> a <strong>MQL</strong>.</p>
+                        <p style="color:var(--text-muted); font-size:0.85rem; margin-top:0.25rem;">Primera fase del proceso de compra del cliente: se da cuenta de que necesita reponer un insumo, cambiar un equipo que falla o abastecer un local nuevo. La prospección y el contenido de la parte alta del pipeline existen para llegar justo en ese momento. Se corresponde con el paso de <strong>Lead</strong> a <strong>MQL</strong>.</p>
                     </div>
                     <div>
                         <strong style="color:var(--color-primary);">R — Resolución de dudas</strong>
@@ -379,13 +379,13 @@ require_once __DIR__ . '/includes/header.php';
         </div>
     </div>
 
-    <!-- ANALÍTICA DEL EMBUDO -->
+    <!-- ANALÍTICA DEL PIPELINE -->
     <div class="card-section">
         <div class="section-header">
-            <h2>8. Analítica del Embudo — Conversión, Volumen y Velocidad</h2>
+            <h2>8. Analítica del Pipeline — Conversión, Volumen y Velocidad</h2>
         </div>
         <p style="color:var(--text-muted); font-size:0.95rem; margin-bottom:1rem;">
-            <a href="analytics.php">Analítica del Embudo</a> (solo administradores) mide cómo se mueven los negocios por el proceso de ventas (§6). Se alimenta del historial de fases (<code>deal_stage_history</code>) que se registra en cada cambio de etapa del <a href="pipeline.php">Embudo</a> — no hay nada que configurar. Filtros: rango de fechas y <strong>embudo</strong> (funciona por separado para cada uno de los embudos configurados).
+            <a href="analytics.php">Analítica del Pipeline</a> (solo administradores) mide cómo se mueven los negocios por el proceso de ventas (§6). Se alimenta del historial de fases (<code>deal_stage_history</code>) que se registra en cada cambio de etapa del <a href="pipeline.php">Pipeline</a> — no hay nada que configurar. Filtros: rango de fechas y <strong>pipeline</strong> (funciona por separado para cada uno de los pipelines configurados).
         </p>
         <div style="display:grid; grid-template-columns:1fr 1fr; gap:1.5rem; font-size:0.9rem;">
             <div>
@@ -402,11 +402,11 @@ require_once __DIR__ . '/includes/header.php';
             </div>
             <div>
                 <h3 style="color:#fff; font-size:1rem; margin-bottom:0.5rem; font-weight:600;">4. Velocidad del pipeline</h3>
-                <p style="color:var(--text-muted);">(Oportunidades calificadas × valor medio × win rate) ÷ ciclo medio en días — cuánto valor produce el embudo por día.</p>
+                <p style="color:var(--text-muted);">(Oportunidades calificadas × valor medio × win rate) ÷ ciclo medio en días — cuánto valor produce el pipeline por día.</p>
             </div>
         </div>
         <div style="background:rgba(6, 182, 212, 0.05); border:1px solid rgba(6, 182, 212, 0.15); padding:1rem; border-radius:8px; font-size:0.85rem; margin-top:1.25rem;">
-            <strong>📌 Lectura fina:</strong> para negocios anteriores a que se activara <code>deal_stage_history</code> los días por fase son una estimación (backfill). El "alcanzó la etapa N" usa la posición <em>actual</em> de las etapas. La vista por zona/asesor llega en una fase posterior — hoy es solo para administradores y muestra todo el embudo.
+            <strong>📌 Lectura fina:</strong> para negocios anteriores a que se activara <code>deal_stage_history</code> los días por fase son una estimación (backfill). El "alcanzó la etapa N" usa la posición <em>actual</em> de las etapas. La vista por zona/asesor llega en una fase posterior — hoy es solo para administradores y muestra todo el pipeline.
         </div>
     </div>
 

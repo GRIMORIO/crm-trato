@@ -96,9 +96,9 @@ foreach ($completed_activities as $act) {
         'title' => '✓ ' . $act['subject'],
         'start' => $act['due_date'],
         'description' => $act['description'],
-        'backgroundColor' => 'rgba(255,255,255,0.06)',
-        'borderColor' => 'rgba(255,255,255,0.1)',
-        'textColor' => '#94a3b8',
+        'backgroundColor' => 'rgba(100,116,139,0.12)',
+        'borderColor' => 'rgba(100,116,139,0.25)',
+        'textColor' => '#64748b',
         'extendedProps' => [
             'status' => $act['status'],
             'type' => $act['type'],
@@ -182,6 +182,45 @@ foreach ($completed_activities as $act) {
 .fc .fc-list-day-text, .fc .fc-list-day-side-text {
     color: var(--color-primary) !important;
     font-weight: 600;
+}
+
+/* Estilos para el Calendario en Modo Claro */
+[data-theme="light"] .fc {
+    color: var(--text-main) !important;
+}
+[data-theme="light"] .fc-theme-standard td,
+[data-theme="light"] .fc-theme-standard th {
+    border: 1px solid var(--border-color) !important;
+}
+[data-theme="light"] .fc-theme-standard .fc-scrollgrid {
+    border: 1px solid var(--border-color) !important;
+}
+[data-theme="light"] .fc .fc-button-primary {
+    background-color: var(--bg-secondary) !important;
+    border-color: var(--border-color) !important;
+    color: var(--text-main) !important;
+}
+[data-theme="light"] .fc .fc-button-primary:hover {
+    background-color: var(--color-primary) !important;
+    border-color: var(--color-primary) !important;
+    color: #fff !important;
+}
+[data-theme="light"] .fc .fc-button-primary:disabled {
+    background-color: rgba(15,23,42,0.05) !important;
+    border-color: transparent !important;
+    color: var(--text-dark) !important;
+}
+[data-theme="light"] .fc .fc-col-header-cell-cushion {
+    color: var(--text-muted) !important;
+}
+[data-theme="light"] .fc .fc-daygrid-day-number {
+    color: var(--text-main) !important;
+}
+[data-theme="light"] .fc .fc-toolbar-title {
+    color: var(--text-main) !important;
+}
+[data-theme="light"] .fc .fc-list-event-title a {
+    color: var(--text-main) !important;
 }
 </style>
 

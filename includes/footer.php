@@ -45,7 +45,7 @@ if (isset($pdo)) {
                         <input type="number" id="deal_value" name="value" step="0.01" min="0" placeholder="1500.00" required>
                     </div>
                     <div class="form-group">
-                        <label for="deal_stage">Etapa del Embudo *</label>
+                        <label for="deal_stage">Etapa del Pipeline *</label>
                         <select id="deal_stage" name="stage_id" required>
                             <?php 
                             $all_pipelines = $pdo->query("SELECT * FROM pipelines ORDER BY id")->fetchAll();

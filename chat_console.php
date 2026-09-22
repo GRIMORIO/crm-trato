@@ -14,7 +14,7 @@ require_once __DIR__ . '/includes/header.php';
     <div style="display:grid; grid-template-columns: 320px 1fr; height: 100%; flex-grow:1;">
         
         <!-- COLUMNA IZQUIERDA: LISTADO DE CHATS -->
-        <div style="border-right: 1px solid var(--border-color); background: rgba(12,16,32,0.4); display:flex; flex-direction:column;">
+        <div style="border-right: 1px solid var(--border-color); background: var(--bg-card); display:flex; flex-direction:column;">
             <div style="padding:1.25rem; border-bottom:1px solid var(--border-color); font-weight:600; color:#fff; display:flex; justify-content:space-between; align-items:center;">
                 <span>Chats de Clientes</span>
                 <span class="badge badge-open" id="chat-count">0</span>
@@ -27,7 +27,7 @@ require_once __DIR__ . '/includes/header.php';
         </div>
         
         <!-- COLUMNA DERECHA: VENTANA DE CONVERSACIÓN -->
-        <div style="display:flex; flex-direction:column; background: rgba(7,10,19,0.2);">
+        <div style="display:flex; flex-direction:column; background: var(--bg-secondary);">
             
             <!-- CABECERA DEL CHAT ACTIVO -->
             <div style="padding:1.25rem; border-bottom:1px solid var(--border-color); display:flex; justify-content:space-between; align-items:center;">
@@ -49,7 +49,7 @@ require_once __DIR__ . '/includes/header.php';
             </div>
             
             <!-- ENTRADA DE TEXTO -->
-            <div style="padding:1.25rem; border-top:1px solid var(--border-color); background:rgba(7,10,19,0.4); display:flex; gap:1rem; align-items:center;">
+            <div style="padding:1.25rem; border-top:1px solid var(--border-color); background:var(--bg-card); display:flex; gap:1rem; align-items:center;">
                 <input type="text" id="chat-input" placeholder="Escribe un mensaje de respuesta..." disabled style="flex-grow:1; padding:0.75rem 1rem; border-radius:8px;">
                 <button class="btn-submit" id="btn-send-chat" disabled style="width:auto; padding:0.75rem 1.5rem;" onclick="sendAgentMessage()">
                     Enviar
@@ -160,11 +160,11 @@ require_once __DIR__ . '/includes/header.php';
                         senderLabel = 'Prospecto';
                     } else if (msg.sender === 'Agent') {
                         alignStyle = 'align-self: flex-end;';
-                        bubbleStyle = 'background: linear-gradient(135deg, rgba(6,182,212,0.2), rgba(168,85,247,0.2)); border: 1px solid var(--color-primary); color: #fff;';
+                        bubbleStyle = 'background: linear-gradient(135deg, rgba(6,182,212,0.2), rgba(168,85,247,0.2)); border: 1px solid var(--color-primary); color: var(--text-main);';
                         senderLabel = 'Tú (Asesor)';
                     } else { // AI
                         alignStyle = 'align-self: flex-start;';
-                        bubbleStyle = 'background-color: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); color: #e9d5ff;';
+                        bubbleStyle = 'background-color: rgba(168,85,247,0.1); border: 1px solid rgba(168,85,247,0.3); color: var(--text-main);';
                         senderLabel = 'Asistente IA TIPS';
                     }
                     

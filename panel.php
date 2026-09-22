@@ -81,7 +81,7 @@ $recent_deals = $stmt_recent_deals->fetchAll();
 <!-- Estado Minimizado -->
 <div id="coach-banner-collapsed" style="display: none; background: rgba(6, 182, 212, 0.05); border: 1px solid rgba(6, 182, 212, 0.15); border-radius: 8px; padding: 0.5rem 1rem; margin-bottom: 1.5rem; align-items: center; justify-content: space-between; gap: 1rem;">
     <div style="display: flex; align-items: center; gap: 0.5rem; font-size: 0.85rem; color: var(--text-muted);">
-        <span style="background: linear-gradient(135deg, #06b6d4, #a855f7); width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 0.5rem; flex-shrink:0;" title="<?php echo htmlspecialchars($random_tip['author']); ?>"><?php echo $initials; ?></span>
+        <span style="background: linear-gradient(135deg, #06b6d4, #a855f7); width: 20px; height: 20px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff !important; font-weight: 800; font-size: 0.5rem; flex-shrink:0;" title="<?php echo htmlspecialchars($random_tip['author']); ?>"><?php echo $initials; ?></span>
         <span>💡 El <strong>Sales Coach (<?php echo htmlspecialchars($random_tip['author']); ?>)</strong> está listo para guiarte en tus metas del mes.</span>
     </div>
     <button onclick="toggleCoachBanner(false)" class="btn-action btn-sm" style="padding: 2px 8px; font-size: 0.7rem; border-color: rgba(6, 182, 212, 0.3); background: rgba(6, 182, 212, 0.1); color: var(--color-primary);">Expandir Coach</button>
@@ -90,7 +90,7 @@ $recent_deals = $stmt_recent_deals->fetchAll();
 <!-- Estado Maximizado -->
 <div id="coach-banner-expanded" style="background: linear-gradient(135deg, rgba(6, 182, 212, 0.08), rgba(168, 85, 247, 0.08)); border: 1px solid rgba(6, 182, 212, 0.2); border-radius: 12px; padding: 1.25rem 1.5rem; margin-bottom: 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1.5rem; position: relative;">
     <div style="display: flex; align-items: center; gap: 1.25rem; flex: 1;">
-        <div style="background: linear-gradient(135deg, #06b6d4, #a855f7); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 1rem; box-shadow: 0 4px 10px rgba(6,182,212,0.3); flex-shrink: 0;" title="<?php echo htmlspecialchars($random_tip['author']); ?>">
+        <div style="background: linear-gradient(135deg, #06b6d4, #a855f7); width: 48px; height: 48px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff !important; font-weight: 800; font-size: 1rem; box-shadow: 0 4px 10px rgba(6,182,212,0.3); flex-shrink: 0;" title="<?php echo htmlspecialchars($random_tip['author']); ?>">
             <?php echo $initials; ?>
         </div>
         <div>
@@ -98,18 +98,18 @@ $recent_deals = $stmt_recent_deals->fetchAll();
                 <i data-lucide="sparkles" style="width: 12px; height: 12px;"></i>
                 <?php echo htmlspecialchars($coach_preamble); ?>
             </div>
-            <p style="font-size: 0.95rem; color: #f1f5f9; font-style: italic; margin: 0; line-height: 1.4;">
+            <p style="font-size: 0.95rem; color: var(--text-main); font-style: italic; margin: 0; line-height: 1.4;">
                 "<?php echo htmlspecialchars($random_tip['tip_text']); ?>"
             </p>
             <span style="font-size: 0.8rem; color: var(--text-muted); font-weight: 500; display: block; margin-top: 0.25rem;">— <?php echo htmlspecialchars($random_tip['author']); ?> (Categoría: <?php echo htmlspecialchars($random_tip['category']); ?>)</span>
         </div>
     </div>
     <div style="display: flex; flex-direction: column; gap: 0.4rem; align-items: flex-end; flex-shrink: 0;">
-        <button onclick="window.location.reload();" class="btn-action btn-sm" style="width: 100%; padding: 5px 10px; font-size: 0.75rem; border-color: rgba(255,255,255,0.1); background: rgba(255,255,255,0.02); color: var(--text-muted);" title="Cargar otro consejo">
+        <button onclick="window.location.reload();" class="btn-action btn-sm" style="width: 100%; padding: 5px 10px; font-size: 0.75rem; border-color: var(--border-color); background: rgba(148,163,184,0.08); color: var(--text-muted);" title="Cargar otro consejo">
             <i data-lucide="refresh-cw" style="width: 11px; height: 11px; display: inline-block; vertical-align: middle; margin-right: 4px;"></i>
             Otro Consejo
         </button>
-        <button onclick="toggleCoachBanner(true)" class="btn-action btn-sm" style="width: 100%; padding: 5px 10px; font-size: 0.75rem; border-color: rgba(239,68,68,0.15); background: rgba(239,68,68,0.05); color: #fca5a5;" title="Minimizar Coach">
+        <button onclick="toggleCoachBanner(true)" class="btn-action btn-sm" style="width: 100%; padding: 5px 10px; font-size: 0.75rem; border-color: rgba(239,68,68,0.3); background: rgba(239,68,68,0.08); color: var(--color-error);" title="Minimizar Coach">
             Minimizar Space
         </button>
     </div>
@@ -160,15 +160,15 @@ $recent_deals = $stmt_recent_deals->fetchAll();
 </div>
 
 <!-- METAS Y CUOTAS DE VENTAS PREMIUM -->
-<div class="card-section" style="margin-top:2.5rem; background:linear-gradient(135deg, rgba(18,24,48,0.65), rgba(6,182,212,0.05)); border:1px solid rgba(6,182,212,0.15);">
+<div class="card-section" style="margin-top:2.5rem; background:linear-gradient(135deg, var(--bg-card), rgba(var(--color-primary-rgb),0.05)); border:1px solid rgba(var(--color-primary-rgb),0.15);">
     <div class="section-header" style="margin-bottom:1rem;">
-        <h2 style="display:flex; align-items:center; gap:0.5rem; color:#fff; font-size:1.1rem; margin:0;">
+        <h2 style="display:flex; align-items:center; gap:0.5rem; color:var(--text-main); font-size:1.1rem; margin:0;">
             <i data-lucide="target" style="width:20px; height:20px; color:var(--color-primary); vertical-align:middle; display:inline-block;"></i>
             Meta de Ventas Mensual (Cuota de Cierre B2B)
         </h2>
         <form action="api.php?action=update_sales_quota" method="POST" style="display:flex; gap:0.5rem; align-items:center; margin-left:auto;">
             <label style="font-size:0.8rem; color:var(--text-muted);">Meta ($):</label>
-            <input type="number" name="quota_target" value="<?php echo intval($sales_quota_target); ?>" style="width:90px; padding:0.25rem 0.5rem; font-size:0.8rem; background:rgba(0,0,0,0.3); border:1px solid var(--border-color); color:#fff; border-radius:4px;" required>
+            <input type="number" name="quota_target" value="<?php echo intval($sales_quota_target); ?>" style="width:90px; padding:0.25rem 0.5rem; font-size:0.8rem; background:rgba(0,0,0,0.3); border:1px solid var(--border-color); color:#fff !important; border-radius:4px;" required>
             <button type="submit" class="btn-action btn-sm" style="padding:0.25rem 0.6rem; font-size:0.75rem;">Ajustar</button>
         </form>
     </div>
@@ -176,14 +176,14 @@ $recent_deals = $stmt_recent_deals->fetchAll();
     <div style="display:grid; grid-template-columns: 1.2fr 2fr 1.2fr; gap:2rem; align-items:center;">
         <div>
             <div style="font-size:0.8rem; color:var(--text-muted); margin-bottom:0.25rem;">Meta de Cierre</div>
-            <div style="font-size:1.5rem; font-weight:700; color:#fff;">$<?php echo number_format($sales_quota_target, 2); ?></div>
+            <div style="font-size:1.5rem; font-weight:700; color:var(--text-main);">$<?php echo number_format($sales_quota_target, 2); ?></div>
         </div>
         <div>
             <div style="display:flex; justify-content:space-between; font-size:0.85rem; color:var(--text-muted); margin-bottom:0.5rem;">
                 <span>Progreso Actual: <strong>$<?php echo number_format($won_val, 2); ?></strong></span>
-                <span style="font-weight:700; color:#06b6d4;"><?php echo $quota_pct; ?>%</span>
+                <span style="font-weight:700; color:var(--color-primary);"><?php echo $quota_pct; ?>%</span>
             </div>
-            <div style="width:100%; height:10px; background:rgba(255,255,255,0.05); border-radius:5px; overflow:hidden; border:1px solid rgba(255,255,255,0.02);">
+            <div style="width:100%; height:10px; background:rgba(148,163,184,0.15); border-radius:5px; overflow:hidden; border:1px solid var(--border-color);">
                 <div style="width:<?php echo $quota_pct; ?>%; height:100%; background:linear-gradient(90deg, var(--color-secondary), var(--color-primary)); border-radius:5px; box-shadow: 0 0 10px rgba(6,182,212,0.3);"></div>
             </div>
         </div>
@@ -269,7 +269,7 @@ $recent_deals = $stmt_recent_deals->fetchAll();
         <div class="section-header">
             <h2>Oportunidades Añadidas Recientemente</h2>
             <a href="pipeline.php" class="btn-sm btn-secondary" style="text-decoration:none; display:flex; align-items:center; gap:0.25rem;">
-                <i data-lucide="kanban-square" style="width:12px; height:12px;"></i> Ver Embudo
+                <i data-lucide="kanban-square" style="width:12px; height:12px;"></i> Ver Pipeline
             </a>
         </div>
         

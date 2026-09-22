@@ -1,11 +1,11 @@
 <?php
 /**
- * includes/analytics.php — Motor de analítica del embudo de ventas (Fase 1).
+ * includes/analytics.php — Motor de analítica del pipeline de ventas (Fase 1).
  *
  * Funciones puras: reciben PDO + filtros, devuelven arrays. No hacen echo.
  * Solo LEE lo que ya existe: `deals`, `stages`, `deal_stage_history`, `accounts`,
  * `live_chats`. Degrada limpio si falta `deal_stage_history` o las columnas de
- * multi-embudo / cierre.
+ * multi-pipeline / cierre.
  *
  * Todo el cálculo estadístico (media, mediana) se hace en PHP a partir de listas
  * pequeñas — así el módulo funciona igual en MariaDB local y en el hosting, sin
@@ -77,7 +77,7 @@ function an_days_between(?string $a, ?string $b)
 }
 
 /* ------------------------------------------------------------------ *
- *  Metadatos del embudo
+ *  Metadatos del pipeline
  * ------------------------------------------------------------------ */
 
 function an_pipelines(PDO $pdo): array
@@ -86,7 +86,7 @@ function an_pipelines(PDO $pdo): array
     return $pdo->query("SELECT id, name FROM pipelines ORDER BY id")->fetchAll(PDO::FETCH_ASSOC);
 }
 
-/** Etapas ordenadas por posición, opcionalmente de un solo embudo. */
+/** Etapas ordenadas por posición, opcionalmente de un solo pipeline. */
 function an_stages(PDO $pdo, $pipeline_id = null): array
 {
     $cols = "id, name, position" . (an_has_win_prob($pdo) ? ", win_probability" : "");
@@ -115,12 +115,12 @@ function an_qualified_stage_index(array $stages, PDO $pdo): int
             if (isset($s['win_probability']) && (int) $s['win_probability'] >= 40) return $i;
         }
     }
-    // 3) Fallback: la mitad del embudo.
+    // 3) Fallback: la mitad del pipeline.
     return (int) floor(max(0, count($stages) - 1) / 2);
 }
 
 /* ------------------------------------------------------------------ *
- *  Carga cruda de negocios + historial para el rango / embudo
+ *  Carga cruda de negocios + historial para el rango / pipeline
  * ------------------------------------------------------------------ */
 
 function an_load_deals(PDO $pdo, $pipeline_id = null): array
@@ -145,7 +145,7 @@ function an_load_deals(PDO $pdo, $pipeline_id = null): array
     $st->execute($args);
     $deals = $st->fetchAll(PDO::FETCH_ASSOC);
 
-    // Historial por negocio (si existe la tabla), mapeando stage_id -> posición del embudo.
+    // Historial por negocio (si existe la tabla), mapeando stage_id -> posición del pipeline.
     $history = [];
     if ($deals && an_has_history($pdo)) {
         $ids = array_column($deals, 'id');
@@ -157,7 +157,7 @@ function an_load_deals(PDO $pdo, $pipeline_id = null): array
         $hst->execute($ids);
         foreach ($hst->fetchAll(PDO::FETCH_ASSOC) as $h) {
             $sid = (int) $h['stage_id'];
-            // Ignora filas de etapas que no pertenecen al embudo filtrado.
+            // Ignora filas de etapas que no pertenecen al pipeline filtrado.
             if ($pipeline_id && $stage_id_set && !in_array($sid, $stage_id_set)) continue;
             $history[(int) $h['deal_id']][] = [
                 'stage_id'   => $sid,

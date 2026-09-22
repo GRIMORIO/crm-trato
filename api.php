@@ -25,6 +25,20 @@ function check_deal_permission(PDO $pdo, $deal_id) {
 }
 
 /**
+ * Cuenta cuántas empresas y negocios tiene asignados un agente (por el string
+ * `assigned_agent_name` de `crm_users`, que es lo que `accounts.assigned_agent`/
+ * `deals.assigned_agent` guardan — no hay FK real entre estas tablas).
+ */
+function agent_workload_counts(PDO $pdo, $agent_name) {
+    if (!$agent_name) return ['accounts' => 0, 'deals' => 0];
+    $a = $pdo->prepare("SELECT COUNT(*) FROM accounts WHERE assigned_agent = ?");
+    $a->execute([$agent_name]);
+    $d = $pdo->prepare("SELECT COUNT(*) FROM deals WHERE assigned_agent = ?");
+    $d->execute([$agent_name]);
+    return ['accounts' => (int) $a->fetchColumn(), 'deals' => (int) $d->fetchColumn()];
+}
+
+/**
  * Registra la entrada de un negocio a una fase en `deal_stage_history`.
  * No hace nada si la última fila del historial ya es esa misma fase (evita duplicados
  * al guardar un negocio sin mover su etapa). Tolerante a que la tabla no exista todavía
@@ -132,7 +146,7 @@ try {
             $stmt = $pdo->prepare("INSERT INTO `deals` (`title`, `value`, `stage_id`, `account_id`, `contact_id`, `status`, `close_date`, `assigned_agent`) VALUES (?, ?, ?, ?, ?, 'Open', ?, ?)");
             $stmt->execute([$title, $value, $stage_id, $account_id, $contact_id, $close_date, $assigned_agent]);
 
-            // Registrar la fase inicial en el historial del embudo
+            // Registrar la fase inicial en el historial del pipeline
             record_stage_change($pdo, $pdo->lastInsertId(), $stage_id);
 
             // Redirigir a la página de origen si existe, sino al pipeline
@@ -154,7 +168,7 @@ try {
             $stmt = $pdo->prepare("UPDATE `deals` SET `stage_id` = ? WHERE `id` = ?");
             $stmt->execute([$stage_id, $deal_id]);
 
-            // Registrar el cambio de fase en el historial del embudo
+            // Registrar el cambio de fase en el historial del pipeline
             record_stage_change($pdo, $deal_id, $stage_id);
 
             // --- EJECUTAR MOTOR DE AUTOMATIZACIONES ---
@@ -217,7 +231,7 @@ try {
             $stmt = $pdo->prepare("UPDATE `deals` SET `status` = ? WHERE `id` = ?");
             $stmt->execute([$status, $deal_id]);
 
-            // Sellar / limpiar la fecha de conversión para el timeline del embudo
+            // Sellar / limpiar la fecha de conversión para el timeline del pipeline
             stamp_deal_closed_at($pdo, $deal_id, $status);
 
             echo json_encode(['success' => true, 'message' => "El estado del deal ha cambiado a $status."]);
@@ -390,7 +404,7 @@ try {
 
             // Posición de inserción según el selector del modal:
             //   after_stage_id ausente        -> al final (comportamiento histórico)
-            //   after_stage_id = 0            -> al inicio del embudo
+            //   after_stage_id = 0            -> al inicio del pipeline
             //   after_stage_id = <id etapa>   -> justo después de esa etapa
             $new_pos = null;
             if (array_key_exists('after_stage_id', $_POST)) {
@@ -463,14 +477,14 @@ try {
         case 'create_pipeline':
             $name = isset($_POST['name']) ? trim($_POST['name']) : '';
             if (empty($name)) {
-                throw new Exception("El nombre del embudo es obligatorio.");
+                throw new Exception("El nombre del pipeline es obligatorio.");
             }
             
             $stmt = $pdo->prepare("INSERT INTO `pipelines` (`name`) VALUES (?)");
             $stmt->execute([$name]);
             $new_id = $pdo->lastInsertId();
             
-            // Crear etapa inicial por defecto en el nuevo embudo
+            // Crear etapa inicial por defecto en el nuevo pipeline
             $stmt_stage = $pdo->prepare("INSERT INTO `stages` (`name`, `position`, `pipeline_id`) VALUES (?, 1, ?)");
             $stmt_stage->execute(['Contacto Inicial', $new_id]);
             
@@ -480,20 +494,20 @@ try {
         case 'delete_pipeline':
             $pipeline_id = isset($input_data['pipeline_id']) ? intval($input_data['pipeline_id']) : 0;
             if (!$pipeline_id) {
-                throw new Exception("ID de embudo obligatorio.");
+                throw new Exception("ID de pipeline obligatorio.");
             }
 
-            // No permitir eliminar el último embudo
+            // No permitir eliminar el último pipeline
             $total_pipelines = (int) $pdo->query("SELECT COUNT(*) FROM pipelines")->fetchColumn();
             if ($total_pipelines <= 1) {
-                throw new Exception("No se puede eliminar el único embudo. Crea otro embudo antes de eliminar este.");
+                throw new Exception("No se puede eliminar el único pipeline. Crea otro pipeline antes de eliminar este.");
             }
 
-            // Bloquear si hay oportunidades en alguna etapa de este embudo
+            // Bloquear si hay oportunidades en alguna etapa de este pipeline
             $deal_check = $pdo->prepare("SELECT COUNT(*) FROM deals d JOIN stages s ON d.stage_id = s.id WHERE s.pipeline_id = ?");
             $deal_check->execute([$pipeline_id]);
             if ($deal_check->fetchColumn() > 0) {
-                throw new Exception("No se puede eliminar el embudo porque contiene oportunidades. Muévelas o elimínalas antes de continuar.");
+                throw new Exception("No se puede eliminar el pipeline porque contiene oportunidades. Muévelas o elimínalas antes de continuar.");
             }
 
             // Las etapas se borran en cascada (stages.pipeline_id ON DELETE CASCADE)
@@ -503,7 +517,7 @@ try {
             $next_id = (int) $pdo->query("SELECT id FROM pipelines ORDER BY id LIMIT 1")->fetchColumn();
             echo json_encode([
                 'success' => true,
-                'message' => 'Embudo eliminado con éxito.',
+                'message' => 'Pipeline eliminado con éxito.',
                 'redirect' => 'pipeline.php?pipeline_id=' . $next_id
             ]);
             exit;
@@ -718,7 +732,7 @@ try {
 
         case 'get_account_detail':
             // Ficha completa de una empresa para account.php: negocios, historial de
-            // fases del embudo, actividades, notas, correos, facturas y documentos.
+            // fases del pipeline, actividades, notas, correos, facturas y documentos.
             $account_id = isset($_GET['account_id']) ? intval($_GET['account_id']) : 0;
             if (!$account_id) {
                 throw new Exception("ID de cuenta obligatorio.");
@@ -742,7 +756,7 @@ try {
             $stmt_con->execute([$account_id]);
             $contacts = $stmt_con->fetchAll(PDO::FETCH_ASSOC);
 
-            // Negocios (deals) de la cuenta con su fase y embudo
+            // Negocios (deals) de la cuenta con su fase y pipeline
             $stmt_deals = $pdo->prepare("
                 SELECT d.*, s.name AS stage_name, s.position AS stage_position, s.pipeline_id,
                        p.name AS pipeline_name,
@@ -779,7 +793,7 @@ try {
                 }
             }
 
-            // Ruta completa de fases por cada embudo involucrado
+            // Ruta completa de fases por cada pipeline involucrado
             $pipeline_stages = [];
             foreach (array_unique(array_map('intval', array_column($deals, 'pipeline_id'))) as $pid) {
                 $st = $pdo->prepare("SELECT id, name, position FROM stages WHERE pipeline_id = ? ORDER BY position ASC");
@@ -1055,6 +1069,71 @@ try {
             echo json_encode(['success' => true, 'message' => 'Configuración guardada correctamente.']);
             exit;
 
+        case 'upload_brand_logo':
+            require_admin(true);
+            $theme = isset($_POST['theme']) ? trim($_POST['theme']) : '';
+            if (!in_array($theme, ['dark', 'light'], true)) {
+                throw new Exception("Tema de logo inválido.");
+            }
+            if (empty($_FILES['logo']['name'])) {
+                throw new Exception("Selecciona una imagen para el logo.");
+            }
+            if ($_FILES['logo']['size'] > 2 * 1024 * 1024) {
+                throw new Exception("La imagen no puede superar 2 MB.");
+            }
+
+            // getimagesize() valida que el archivo sea una imagen real (no solo confiar en la extensión
+            // o en el mime que reporta el navegador) y de paso evita SVG, que podría traer <script> embebido.
+            $img_info = @getimagesize($_FILES['logo']['tmp_name']);
+            $allowed_mimes = ['image/png' => 'png', 'image/jpeg' => 'jpg', 'image/webp' => 'webp'];
+            if ($img_info === false || !isset($allowed_mimes[$img_info['mime']])) {
+                throw new Exception("Formato no soportado. Usa PNG, JPG o WEBP.");
+            }
+
+            $target_dir = __DIR__ . '/uploads/branding/';
+            if (!file_exists($target_dir)) {
+                mkdir($target_dir, 0777, true);
+            }
+            $stored_name = 'logo_' . $theme . '_' . time() . '.' . $allowed_mimes[$img_info['mime']];
+            $target_path = $target_dir . $stored_name;
+
+            if (!move_uploaded_file($_FILES['logo']['tmp_name'], $target_path)) {
+                throw new Exception("Error al guardar la imagen en el servidor.");
+            }
+
+            $setting_key = 'brand_logo_' . $theme . '_path';
+            $prev = $pdo->prepare("SELECT setting_value FROM crm_settings WHERE setting_key = ?");
+            $prev->execute([$setting_key]);
+            $old_path = $prev->fetchColumn();
+            if ($old_path && file_exists(__DIR__ . '/' . $old_path)) {
+                @unlink(__DIR__ . '/' . $old_path);
+            }
+
+            $relative_path = 'uploads/branding/' . $stored_name;
+            $stmt = $pdo->prepare("INSERT INTO `crm_settings` (`setting_key`, `setting_value`) VALUES (?, ?) ON DUPLICATE KEY UPDATE `setting_value` = VALUES(`setting_value`)");
+            $stmt->execute([$setting_key, $relative_path]);
+
+            echo json_encode(['success' => true, 'path' => $relative_path]);
+            exit;
+
+        case 'reset_brand_logo':
+            require_admin(true);
+            $theme = isset($input_data['theme']) ? trim($input_data['theme']) : '';
+            if (!in_array($theme, ['dark', 'light'], true)) {
+                throw new Exception("Tema de logo inválido.");
+            }
+            $setting_key = 'brand_logo_' . $theme . '_path';
+            $prev = $pdo->prepare("SELECT setting_value FROM crm_settings WHERE setting_key = ?");
+            $prev->execute([$setting_key]);
+            $old_path = $prev->fetchColumn();
+            if ($old_path && file_exists(__DIR__ . '/' . $old_path)) {
+                @unlink(__DIR__ . '/' . $old_path);
+            }
+            $pdo->prepare("DELETE FROM crm_settings WHERE setting_key = ?")->execute([$setting_key]);
+
+            echo json_encode(['success' => true]);
+            exit;
+
         // ── GESTIÓN DE USUARIOS (solo admin) ───────────────────────────────────
         case 'invite_user':
             require_admin(true);
@@ -1137,13 +1216,36 @@ try {
             echo json_encode(['success' => true, 'message' => 'Rol actualizado.']);
             exit;
 
+        case 'check_delete_user':
+            require_admin(true);
+            $user_id = isset($input_data['user_id']) ? intval($input_data['user_id']) : 0;
+            $target = $pdo->prepare("SELECT username, role, assigned_agent_name FROM crm_users WHERE id = ?");
+            $target->execute([$user_id]);
+            $usr = $target->fetch(PDO::FETCH_ASSOC);
+            if (!$usr) throw new Exception("Usuario no encontrado.");
+
+            $counts = agent_workload_counts($pdo, $usr['assigned_agent_name']);
+
+            $others_stmt = $pdo->prepare("SELECT username, full_name, assigned_agent_name FROM crm_users WHERE id != ? AND role = 'agent' AND assigned_agent_name IS NOT NULL AND assigned_agent_name != '' ORDER BY full_name");
+            $others_stmt->execute([$user_id]);
+            $other_agents = $others_stmt->fetchAll(PDO::FETCH_ASSOC);
+
+            echo json_encode([
+                'success' => true,
+                'needs_reassign' => ($counts['accounts'] + $counts['deals']) > 0,
+                'agent_name' => $usr['assigned_agent_name'],
+                'counts' => $counts,
+                'other_agents' => $other_agents,
+            ]);
+            exit;
+
         case 'delete_user':
             require_admin(true);
             $user_id = isset($input_data['user_id']) ? intval($input_data['user_id']) : 0;
             if ($user_id === (int) $_SESSION['crm_user_id']) {
                 throw new Exception("No puedes eliminar tu propia cuenta.");
             }
-            $target = $pdo->prepare("SELECT username, role FROM crm_users WHERE id = ?");
+            $target = $pdo->prepare("SELECT username, role, assigned_agent_name FROM crm_users WHERE id = ?");
             $target->execute([$user_id]);
             $usr = $target->fetch(PDO::FETCH_ASSOC);
             if (!$usr) throw new Exception("Usuario no encontrado.");
@@ -1151,6 +1253,45 @@ try {
             if ($usr['role'] === 'admin') {
                 $admins = (int) $pdo->query("SELECT COUNT(*) FROM crm_users WHERE role = 'admin'")->fetchColumn();
                 if ($admins <= 1) throw new Exception("No puedes eliminar al único administrador.");
+            }
+
+            $counts = agent_workload_counts($pdo, $usr['assigned_agent_name']);
+            $has_work = ($counts['accounts'] + $counts['deals']) > 0;
+
+            if ($has_work) {
+                // Se exige que el cliente mande la decisión de reasignación explícitamente
+                // (aunque sea '' = "dejar sin asignar") — nunca se borra en silencio a un
+                // agente con cartera activa sin que alguien haya decidido qué pasa con ella.
+                if (!array_key_exists('reassign_to', $input_data)) {
+                    throw new Exception("Este usuario tiene {$counts['accounts']} empresa(s) y {$counts['deals']} negocio(s) asignados. Indica a quién reasignarlos antes de eliminarlo.");
+                }
+                $reassign_to = trim((string) $input_data['reassign_to']);
+                if ($reassign_to !== '') {
+                    $valid = $pdo->prepare("SELECT COUNT(*) FROM crm_users WHERE assigned_agent_name = ? AND id != ?");
+                    $valid->execute([$reassign_to, $user_id]);
+                    if (!$valid->fetchColumn()) {
+                        throw new Exception("El agente de destino no es válido.");
+                    }
+                }
+                $new_value = $reassign_to !== '' ? $reassign_to : null;
+
+                $pdo->beginTransaction();
+                try {
+                    $pdo->prepare("UPDATE accounts SET assigned_agent = ? WHERE assigned_agent = ?")->execute([$new_value, $usr['assigned_agent_name']]);
+                    $pdo->prepare("UPDATE deals SET assigned_agent = ? WHERE assigned_agent = ?")->execute([$new_value, $usr['assigned_agent_name']]);
+                    $pdo->prepare("DELETE FROM crm_password_resets WHERE username = ?")->execute([$usr['username']]);
+                    $pdo->prepare("DELETE FROM crm_users WHERE id = ?")->execute([$user_id]);
+                    $pdo->commit();
+                } catch (Exception $e) {
+                    $pdo->rollBack();
+                    throw $e;
+                }
+
+                $msg = $reassign_to !== ''
+                    ? "Usuario eliminado. {$counts['accounts']} empresa(s) y {$counts['deals']} negocio(s) reasignados a {$reassign_to}."
+                    : "Usuario eliminado. {$counts['accounts']} empresa(s) y {$counts['deals']} negocio(s) quedaron sin asignar.";
+                echo json_encode(['success' => true, 'message' => $msg]);
+                exit;
             }
 
             $pdo->prepare("DELETE FROM crm_password_resets WHERE username = ?")->execute([$usr['username']]);

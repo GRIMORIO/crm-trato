@@ -92,7 +92,7 @@ require_once __DIR__ . '/includes/header.php';
 }
 
 .settings-content-card {
-    background: rgba(255, 255, 255, 0.02);
+    background: var(--bg-card);
     border: 1px solid var(--border-color);
     padding: 2rem;
     border-radius: 10px;
@@ -205,6 +205,19 @@ input:checked + .slider-toggle-round {
 input:checked + .slider-toggle-round:before {
     transform: translateX(20px);
 }
+
+[data-theme="light"] .slider-toggle-round {
+    background-color: rgba(15, 23, 42, 0.15);
+}
+
+[data-theme="light"] .settings-nav-item:hover,
+[data-theme="light"] .settings-nav-item.active {
+    color: var(--text-main);
+}
+
+[data-theme="light"] .settings-title {
+    color: var(--text-main);
+}
 </style>
 
 <div class="settings-container">
@@ -213,6 +226,10 @@ input:checked + .slider-toggle-round:before {
         <button class="settings-nav-item active" onclick="showSection('general')">
             <i data-lucide="sliders"></i>
             <span>General</span>
+        </button>
+        <button class="settings-nav-item" onclick="showSection('brand')">
+            <i data-lucide="palette"></i>
+            <span>Marca</span>
         </button>
         <button class="settings-nav-item" onclick="showSection('apis')">
             <i data-lucide="key-round"></i>
@@ -243,10 +260,6 @@ input:checked + .slider-toggle-round:before {
                 
                 <div class="settings-grid">
                     <div class="form-group">
-                        <label for="crm_name">Nombre del CRM *</label>
-                        <input type="text" id="crm_name" name="crm_name" value="<?php echo htmlspecialchars($settings['crm_name']); ?>" required>
-                    </div>
-                    <div class="form-group">
                         <label for="sales_quota_target">Meta de Cierre Mensual ($) *</label>
                         <input type="number" id="sales_quota_target" name="sales_quota_target" value="<?php echo htmlspecialchars($settings['sales_quota_target']); ?>" required>
                     </div>
@@ -254,6 +267,54 @@ input:checked + .slider-toggle-round:before {
                         <label for="notification_email">Correo de Notificaciones Administrativas</label>
                         <input type="email" id="notification_email" name="notification_email" value="<?php echo htmlspecialchars($settings['notification_email']); ?>" placeholder="ejemplo@tips.cr">
                     </div>
+                </div>
+            </div>
+
+            <!-- SECCIÓN: MARCA -->
+            <div id="section-brand" class="settings-section">
+                <h3 class="settings-title">Marca (Branding)</h3>
+                <p class="settings-description">Personaliza el nombre y el logo que aparecen en la barra lateral, la pestaña del navegador y el pie de página del CRM.</p>
+
+                <div class="settings-grid">
+                    <div class="form-group settings-full-width">
+                        <label for="crm_name">Nombre de tu marca *</label>
+                        <input type="text" id="crm_name" name="crm_name" value="<?php echo htmlspecialchars($settings['crm_name']); ?>" required>
+                        <small style="color:var(--text-muted); font-size:0.75rem; display:block; margin-top:0.25rem;">Se muestra junto al logo en la barra lateral, en el título de la pestaña y en el pie de página.</small>
+                    </div>
+                </div>
+
+                <div style="border-top: 1px dashed var(--border-color); padding-top: 1.5rem; margin-top: 1rem;">
+                    <h4 style="color:var(--text-main); font-size:0.95rem; font-weight:600; margin-bottom:1rem;">Logo</h4>
+                    <div style="display:grid; grid-template-columns: 1fr 1fr; gap:1.5rem;">
+                        <div>
+                            <label>Logo para tema oscuro (el predeterminado)</label>
+                            <div style="background:#111827; border:1px solid var(--border-color); border-radius:8px; padding:1rem; display:flex; align-items:center; justify-content:center; height:80px; margin:0.5rem 0;">
+                                <img id="brand-logo-preview-dark" src="<?php echo htmlspecialchars($brand['logo_dark']); ?>" alt="Logo tema oscuro" style="max-height:50px; max-width:100%; object-fit:contain;">
+                            </div>
+                            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                                <input type="file" id="logo-file-dark" accept="image/png,image/jpeg,image/webp" style="display:none;" onchange="uploadBrandLogo('dark')">
+                                <button type="button" class="btn-action btn-secondary btn-sm" onclick="document.getElementById('logo-file-dark').click()">Subir logo</button>
+                                <?php if (!empty($settings['brand_logo_dark_path'])): ?>
+                                <button type="button" class="btn-action btn-secondary btn-sm" onclick="resetBrandLogo('dark')">Restaurar original</button>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                        <div>
+                            <label>Logo para tema claro</label>
+                            <div style="background:#f1f3f4; border:1px solid var(--border-color); border-radius:8px; padding:1rem; display:flex; align-items:center; justify-content:center; height:80px; margin:0.5rem 0;">
+                                <img id="brand-logo-preview-light" src="<?php echo htmlspecialchars($brand['logo_light']); ?>" alt="Logo tema claro" style="max-height:50px; max-width:100%; object-fit:contain;">
+                            </div>
+                            <div style="display:flex; gap:0.5rem; flex-wrap:wrap;">
+                                <input type="file" id="logo-file-light" accept="image/png,image/jpeg,image/webp" style="display:none;" onchange="uploadBrandLogo('light')">
+                                <button type="button" class="btn-action btn-secondary btn-sm" onclick="document.getElementById('logo-file-light').click()">Subir logo</button>
+                                <?php if (!empty($settings['brand_logo_light_path'])): ?>
+                                <button type="button" class="btn-action btn-secondary btn-sm" onclick="resetBrandLogo('light')">Restaurar original</button>
+                                <?php endif; ?>
+                            </div>
+                        </div>
+                    </div>
+                    <small id="brand-logo-result" style="font-size:0.78rem; display:block; margin-top:0.75rem;"></small>
+                    <small style="color:var(--text-muted); font-size:0.72rem; display:block; margin-top:0.5rem;">PNG, JPG o WEBP, máx. 2 MB.</small>
                 </div>
             </div>
 
@@ -655,6 +716,61 @@ input:checked + .slider-toggle-round:before {
             result.style.color = 'var(--color-error)';
             result.textContent = '❌ Error de red al enviar la prueba.';
         });
+    }
+
+    function uploadBrandLogo(theme) {
+        const input = document.getElementById('logo-file-' + theme);
+        const file = input.files[0];
+        const result = document.getElementById('brand-logo-result');
+        if (!file) return;
+
+        const formData = new FormData();
+        formData.append('logo', file);
+        formData.append('theme', theme);
+
+        result.style.color = 'var(--text-muted)';
+        result.textContent = '⏳ Subiendo logo…';
+
+        fetch('api.php?action=upload_brand_logo', {
+            method: 'POST',
+            body: formData
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                document.getElementById('brand-logo-preview-' + theme).src = data.path + '?v=' + Date.now();
+                result.style.color = 'var(--color-success, #10b981)';
+                result.textContent = '✔️ Logo actualizado.';
+                setTimeout(() => location.reload(), 1200);
+            } else {
+                result.style.color = 'var(--color-error)';
+                result.textContent = '❌ ' + (data.error || 'No se pudo subir el logo.');
+            }
+        })
+        .catch(() => {
+            result.style.color = 'var(--color-error)';
+            result.textContent = '❌ Error de red al subir el logo.';
+        })
+        .finally(() => { input.value = ''; });
+    }
+
+    function resetBrandLogo(theme) {
+        if (!confirm('¿Restaurar el logo original de TIPS para este tema?')) return;
+
+        fetch('api.php?action=reset_brand_logo', {
+            method: 'POST',
+            headers: { 'Content-Type': 'application/json' },
+            body: JSON.stringify({ theme: theme })
+        })
+        .then(res => res.json())
+        .then(data => {
+            if (data.success) {
+                location.reload();
+            } else {
+                alert('Error al restaurar el logo: ' + (data.error || ''));
+            }
+        })
+        .catch(() => alert('Error de red al restaurar el logo.'));
     }
 
     function submitNewAutomationRule() {

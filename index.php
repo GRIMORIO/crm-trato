@@ -14,7 +14,7 @@ $cta_label = $logged_in ? 'Ir al panel' : 'Iniciar sesión';
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>CRM Trato — CRM B2B para equipos de ventas</title>
-    <meta name="description" content="Embudo de ventas visual, seguimiento de actividades, prospección B2B y forecast en una sola herramienta. CRM Trato.">
+    <meta name="description" content="Pipeline de ventas visual, seguimiento de actividades, prospección B2B y forecast en una sola herramienta. CRM Trato.">
     <link rel="icon" type="image/svg+xml" href="assets/image/favicon.svg">
     <link rel="alternate icon" type="image/png" href="assets/image/log_azul.png">
     <link href="https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap" rel="stylesheet">
@@ -127,7 +127,7 @@ $cta_label = $logged_in ? 'Ir al panel' : 'Iniciar sesión';
         <section class="hero">
             <span class="eyebrow">CRM B2B</span>
             <h1>El CRM donde tu pipeline por fin se ordena</h1>
-            <p class="sub">Embudo visual, seguimiento de actividades, prospección y forecast en una sola herramienta. Sin hojas de cálculo, sin tratos que se caen entre las grietas.</p>
+            <p class="sub">Pipeline visual, seguimiento de actividades, prospección y forecast en una sola herramienta. Sin hojas de cálculo, sin tratos que se caen entre las grietas.</p>
             <div class="actions">
                 <a class="btn btn-primary" href="<?php echo $cta_href; ?>"><?php echo $cta_label; ?></a>
                 <a class="btn btn-ghost" href="mailto:hola@crmtrato.com?subject=Solicitud%20de%20acceso%20a%20CRM%20Trato">Solicitar acceso</a>
@@ -138,8 +138,8 @@ $cta_label = $logged_in ? 'Ir al panel' : 'Iniciar sesión';
             <div class="grid">
                 <div class="card">
                     <div class="ico">📊</div>
-                    <h3>Embudo de ventas</h3>
-                    <p>Arrastra oportunidades entre etapas. Valor ponderado por probabilidad de cierre y varios embudos en paralelo.</p>
+                    <h3>Pipeline de ventas</h3>
+                    <p>Arrastra oportunidades entre etapas. Valor ponderado por probabilidad de cierre y varios pipelines en paralelo.</p>
                 </div>
                 <div class="card">
                     <div class="ico">📅</div>

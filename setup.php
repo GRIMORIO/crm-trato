@@ -146,7 +146,7 @@ try {
             FOREIGN KEY (`account_id`) REFERENCES `accounts`(`id`) ON DELETE SET NULL
         ) ENGINE=InnoDB DEFAULT CHARSET=utf8mb4 COLLATE=utf8mb4_unicode_ci;",
         
-        // Embudos de Venta (Pipelines)
+        // Pipelines de Venta (Pipelines)
         "CREATE TABLE `pipelines` (
             `id` INT AUTO_INCREMENT PRIMARY KEY,
             `name` VARCHAR(100) NOT NULL,
@@ -386,20 +386,20 @@ try {
 
     // Sembrar pipelines por defecto
     $pdo->exec("INSERT INTO `pipelines` (`id`, `name`) VALUES 
-        (1, 'Embudo de Ventas Principal'),
+        (1, 'Pipeline de Ventas Principal'),
         (2, 'Logística y Despacho')
     ");
     echo "<div class='step success'>✔️ Pipelines por defecto sembrados.</div>";
 
-    // 3. Insertar Etapas del Embudo (Stages)
+    // 3. Insertar Etapas del Pipeline (Stages)
     $stages = [
-        // Embudo 1: Ventas Principal
+        // Pipeline 1: Ventas Principal
         ['Contacto Inicial', 1, 1, 10],
         ['Calificación BANT', 2, 1, 30],
         ['Demostración / Muestras', 3, 1, 50],
         ['Propuesta Comercial', 4, 1, 75],
         ['Negociación y Cierre', 5, 1, 90],
-        // Embudo 2: Logística y Despacho
+        // Pipeline 2: Logística y Despacho
         ['Pedido Recibido', 1, 2, 20],
         ['Preparación en Bodega', 2, 2, 40],
         ['En Ruta de Entrega', 3, 2, 70],
@@ -409,7 +409,7 @@ try {
     foreach ($stages as $stage) {
         $stmt_stages->execute($stage);
     }
-    echo "<div class='step success'>✔️ Etapas del embudo configuradas para múltiples pipelines con probabilidades de cierre.</div>";
+    echo "<div class='step success'>✔️ Etapas del pipeline configuradas para múltiples pipelines con probabilidades de cierre.</div>";
 
     // Sembrar algunos campos personalizados por defecto
     $stmt_custom = $pdo->prepare("INSERT INTO `custom_field_definitions` (`name`, `field_type`, `options`) VALUES (?, ?, ?)");
@@ -499,7 +499,7 @@ try {
     foreach ($deals as $deal) {
         $stmt_deal->execute($deal);
     }
-    echo "<div class='step success'>✔️ 10 Oportunidades comerciales para múltiples embudos y regiones inyectadas.</div>";
+    echo "<div class='step success'>✔️ 10 Oportunidades comerciales para múltiples pipelines y regiones inyectadas.</div>";
 
     // Sembrar valores de campos personalizados para los deals
     $stmt_cv = $pdo->prepare("INSERT INTO `deal_custom_values` (`deal_id`, `field_id`, `value`) VALUES (?, ?, ?)");

@@ -118,6 +118,22 @@ require_once __DIR__ . '/includes/header.php';
 
 </div>
 
+<!-- Modal: Reasignar cartera antes de eliminar un agente -->
+<div class="modal-overlay" id="reassign-modal">
+    <div class="modal-card">
+        <div class="modal-title">
+            <span>Reasignar cartera antes de eliminar</span>
+            <button class="modal-close" onclick="closeReassignModal()">&times;</button>
+        </div>
+        <p id="reassign-summary" style="color:var(--text-muted); font-size:0.9rem; margin-bottom:1.25rem;"></p>
+        <div class="form-group">
+            <label for="reassign-target">Entregar sus empresas y negocios a</label>
+            <select id="reassign-target"></select>
+        </div>
+        <button type="button" class="btn-submit" onclick="confirmReassignAndDelete()">Reasignar y eliminar</button>
+    </div>
+</div>
+
 <script>
 function showMsg(id, ok, text) {
     const el = document.getElementById(id);
@@ -171,10 +187,69 @@ function changeRole(id, role) {
     }).catch(() => showMsg('table-msg', false, 'Error de red.'));
 }
 
+let pendingDeleteId = null;
+
 function deleteUser(id, name) {
-    if (!confirm('¿Eliminar al usuario "' + name + '"? Esta acción no se puede deshacer.')) return;
-    apiPost('delete_user', { user_id: id }).then(d => {
-        if (d.success) { showMsg('table-msg', true, d.message); setTimeout(() => location.reload(), 800); }
+    apiPost('check_delete_user', { user_id: id }).then(check => {
+        if (!check.success) { showMsg('table-msg', false, check.error); return; }
+
+        if (!check.needs_reassign) {
+            if (!confirm('¿Eliminar al usuario "' + name + '"? Esta acción no se puede deshacer.')) return;
+            doDeleteUser(id, '');
+            return;
+        }
+
+        if (check.other_agents.length === 0) {
+            const msg = '"' + name + '" tiene ' + check.counts.accounts + ' empresa(s) y ' + check.counts.deals +
+                ' negocio(s) asignados, y no hay otro agente al que reasignarlos.\n\n¿Eliminar de todas formas y dejarlos sin asignar?';
+            if (!confirm(msg)) return;
+            doDeleteUser(id, '');
+            return;
+        }
+
+        pendingDeleteId = id;
+        document.getElementById('reassign-summary').textContent =
+            '"' + name + '" tiene ' + check.counts.accounts + ' empresa(s) y ' + check.counts.deals +
+            ' negocio(s) asignados. Elige a quién se los entregas antes de eliminarlo.';
+
+        const select = document.getElementById('reassign-target');
+        select.innerHTML = '<option value="">— Dejar sin asignar —</option>' +
+            check.other_agents.map(a => '<option value="' + escapeHtmlAttr(a.assigned_agent_name) + '">' +
+                escapeHtmlAttr(a.full_name || a.username) + '</option>').join('');
+        select.selectedIndex = 1; // preseleccionar el primer agente real, no "sin asignar"
+
+        openReassignModal();
+    }).catch(() => showMsg('table-msg', false, 'Error de red al verificar el usuario.'));
+}
+
+function escapeHtmlAttr(s) {
+    return String(s).replace(/&/g, '&amp;').replace(/"/g, '&quot;').replace(/</g, '&lt;');
+}
+
+function openReassignModal() {
+    const modal = document.getElementById('reassign-modal');
+    modal.style.display = 'flex';
+    setTimeout(() => modal.classList.add('active'), 10);
+}
+
+function closeReassignModal() {
+    const modal = document.getElementById('reassign-modal');
+    modal.classList.remove('active');
+    setTimeout(() => modal.style.display = 'none', 250);
+    pendingDeleteId = null;
+}
+
+function confirmReassignAndDelete() {
+    if (!pendingDeleteId) return;
+    const target = document.getElementById('reassign-target').value;
+    const id = pendingDeleteId;
+    closeReassignModal();
+    doDeleteUser(id, target);
+}
+
+function doDeleteUser(id, reassignTo) {
+    apiPost('delete_user', { user_id: id, reassign_to: reassignTo }).then(d => {
+        if (d.success) { showMsg('table-msg', true, d.message); setTimeout(() => location.reload(), 1400); }
         else showMsg('table-msg', false, d.error);
     }).catch(() => showMsg('table-msg', false, 'Error de red.'));
 }

@@ -1,6 +1,6 @@
 <?php
 /**
- * pipeline.php — Vista del Embudo de Ventas Kanban (Pipedrive clone)
+ * pipeline.php — Vista del Pipeline de Ventas Kanban (Pipedrive clone)
  */
 
 require_once __DIR__ . '/config.php';
@@ -8,14 +8,14 @@ require_once __DIR__ . '/includes/auth.php';
 require_login();
 require_once __DIR__ . '/includes/header.php';
 
-// Obtener todas las pipelines (embudos) registradas
+// Obtener todas las pipelines (pipelines) registradas
 $pipelines = $pdo->query("SELECT * FROM pipelines ORDER BY id")->fetchAll();
 $custom_fields_def = $pdo->query("SELECT * FROM custom_field_definitions ORDER BY id")->fetchAll();
 
 // Determinar pipeline activa
 $active_pipeline_id = isset($_GET['pipeline_id']) ? intval($_GET['pipeline_id']) : ($pipelines[0]['id'] ?? 1);
 
-// Obtener todas las etapas del embudo activo
+// Obtener todas las etapas del pipeline activo
 $stages_stmt = $pdo->prepare("SELECT * FROM stages WHERE pipeline_id = ? ORDER BY position");
 $stages_stmt->execute([$active_pipeline_id]);
 $stages = $stages_stmt->fetchAll();
@@ -42,7 +42,7 @@ if ($qualification_framework === 'BANT') {
     $scoring_meddic_champion = intval($pdo->query("SELECT setting_value FROM crm_settings WHERE setting_key = 'scoring_meddic_champion'")->fetchColumn() ?: 15);
 }
 
-// Obtener todos los deals abiertos que pertenecen al embudo activo
+// Obtener todos los deals abiertos que pertenecen al pipeline activo
 $restriction = get_visibility_restriction();
 
 if ($restriction !== '') {
@@ -339,7 +339,7 @@ foreach ($deals as $deal) {
             
             <div style="display: grid; grid-template-columns: 1fr 1fr; gap: 1rem;">
                 <div class="form-group">
-                    <label for="edit-deal-stage-input">Etapa del Embudo *</label>
+                    <label for="edit-deal-stage-input">Etapa del Pipeline *</label>
                     <select id="edit-deal-stage-input" name="stage_id" required>
                         <?php foreach ($stages as $stg): ?>
                             <option value="<?php echo $stg['id']; ?>"><?php echo htmlspecialchars($stg['name']); ?></option>
@@ -398,7 +398,7 @@ foreach ($deals as $deal) {
         
         <!-- SALES COACH DE BRIAN TRACY CONTEXTUAL -->
         <div id="modal-sales-coach-container" style="margin-top: 1.5rem; background: linear-gradient(135deg, rgba(6, 182, 212, 0.08), rgba(168, 85, 247, 0.08)); border: 1px solid rgba(6, 182, 212, 0.2); border-radius: 8px; padding: 1rem; display: flex; align-items: center; gap: 1rem;">
-            <div style="background: linear-gradient(135deg, #06b6d4, #a855f7); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff; font-weight: 800; font-size: 0.75rem; flex-shrink:0;">
+            <div style="background: linear-gradient(135deg, #06b6d4, #a855f7); width: 32px; height: 32px; border-radius: 50%; display: flex; align-items: center; justify-content: center; color: #fff !important; font-weight: 800; font-size: 0.75rem; flex-shrink:0;">
                 BT
             </div>
             <div>
@@ -414,11 +414,11 @@ foreach ($deals as $deal) {
     </div>
 </div>
 
-<!-- Modal: Nueva Etapa del Embudo -->
+<!-- Modal: Nueva Etapa del Pipeline -->
 <div class="modal-overlay" id="stage-modal">
     <div class="modal-card">
         <div class="modal-title">
-            <span>Agregar Nueva Etapa al Embudo</span>
+            <span>Agregar Nueva Etapa al Pipeline</span>
             <button class="modal-close" onclick="closeStageModal()">&times;</button>
         </div>
         <form action="api.php?action=create_stage" method="POST">
@@ -428,9 +428,9 @@ foreach ($deals as $deal) {
                 <input type="text" id="stage_name" name="name" placeholder="Ej. Presentación de Muestras..." required>
             </div>
             <div class="form-group">
-                <label for="after_stage_id">Posición en el embudo</label>
+                <label for="after_stage_id">Posición en el pipeline</label>
                 <select id="after_stage_id" name="after_stage_id">
-                    <option value="0">Al inicio del embudo</option>
+                    <option value="0">Al inicio del pipeline</option>
                     <?php foreach ($stages as $s): ?>
                         <option value="<?php echo (int) $s['id']; ?>" <?php echo ((int) $s['id'] === $last_stage_id) ? 'selected' : ''; ?>>
                             Después de: <?php echo htmlspecialchars($s['name']); ?>
@@ -443,19 +443,19 @@ foreach ($deals as $deal) {
     </div>
 </div>
 
-<!-- Modal: Nuevo Embudo de Ventas -->
+<!-- Modal: Nuevo Pipeline de Ventas -->
 <div class="modal-overlay" id="pipeline-modal">
     <div class="modal-card">
         <div class="modal-title">
-            <span>Crear Nuevo Embudo de Ventas</span>
+            <span>Crear Nuevo Pipeline de Ventas</span>
             <button class="modal-close" onclick="closePipelineModal()">&times;</button>
         </div>
         <form action="api.php?action=create_pipeline" method="POST">
             <div class="form-group">
-                <label for="pipeline_name">Nombre del Embudo *</label>
+                <label for="pipeline_name">Nombre del Pipeline *</label>
                 <input type="text" id="pipeline_name" name="name" placeholder="Ej. Ventas Corporativas, Posventa..." required>
             </div>
-            <button type="submit" class="btn-submit">Crear Embudo</button>
+            <button type="submit" class="btn-submit">Crear Pipeline</button>
         </form>
     </div>
 </div>
@@ -746,7 +746,7 @@ foreach ($deals as $deal) {
         setTimeout(() => stageModal.style.display = 'none', 250);
     }
 
-    // Modal de Nuevo Embudo
+    // Modal de Nuevo Pipeline
     const pipelineModal = document.getElementById('pipeline-modal');
 
     function openPipelineModal() {
@@ -759,14 +759,14 @@ foreach ($deals as $deal) {
         setTimeout(() => pipelineModal.style.display = 'none', 250);
     }
 
-    // Cambiar de Embudo
+    // Cambiar de Pipeline
     function switchPipeline(pipelineId) {
         window.location.href = 'pipeline.php?pipeline_id=' + pipelineId;
     }
 
-    // Suprimir Embudo (con todas sus etapas)
+    // Suprimir Pipeline (con todas sus etapas)
     function deletePipeline(pipelineId) {
-        if (!confirm("¿Eliminar este embudo por completo? Se borrarán también todas sus etapas. Esta acción no se puede deshacer.")) return;
+        if (!confirm("¿Eliminar este pipeline por completo? Se borrarán también todas sus etapas. Esta acción no se puede deshacer.")) return;
         fetch('api.php?action=delete_pipeline', {
             method: 'POST',
             headers: {
@@ -779,7 +779,7 @@ foreach ($deals as $deal) {
             if (data.success) {
                 window.location.href = data.redirect || 'pipeline.php';
             } else {
-                alert("Error al eliminar el embudo: " + data.error);
+                alert("Error al eliminar el pipeline: " + data.error);
             }
         })
         .catch(err => {
@@ -814,7 +814,7 @@ foreach ($deals as $deal) {
 
     function deleteStage(event, stageId) {
         event.stopPropagation(); // Evitar que el click se propague
-        if (!confirm("¿Estás seguro de que deseas eliminar esta etapa del embudo?")) return;
+        if (!confirm("¿Estás seguro de que deseas eliminar esta etapa del pipeline?")) return;
         
         fetch('api.php?action=delete_stage', {
             method: 'POST',
@@ -893,7 +893,7 @@ foreach ($deals as $deal) {
                         } else if (parseInt(deal.bant_need) === 0) {
                             coachTip = "Conéctate con la necesidad de su negocio. Si tu cliente no siente una necesidad urgente de cambiar sus hornos, no tendrá prisa por comprar.";
                         } else if (parseInt(deal.bant_timeline) === 0) {
-                            coachTip = "Establece un plazo claro para el cierre. Sin un marco de tiempo definido, el trato flotará sin rumbo en tu embudo.";
+                            coachTip = "Establece un plazo claro para el cierre. Sin un marco de tiempo definido, el trato flotará sin rumbo en tu pipeline.";
                         } else if (parseInt(deal.bant_budget) === 1 && parseInt(deal.bant_authority) === 1 && parseInt(deal.bant_need) === 1 && parseInt(deal.bant_timeline) === 1) {
                             coachTip = "¡Excelente calificación BANT! Tienes presupuesto, decisor, necesidad y plazo. Ahora concéntrate en demostrar la rentabilidad técnica de TIPS.";
                         }

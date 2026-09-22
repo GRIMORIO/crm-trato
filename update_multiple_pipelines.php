@@ -1,6 +1,6 @@
 <?php
 /**
- * update_multiple_pipelines.php — Parche de Base de Datos para integrar Múltiples Embudos (Pipelines) en TIPS CRM
+ * update_multiple_pipelines.php — Parche de Base de Datos para integrar Múltiples Pipelines (Pipelines) en TIPS CRM
  */
 
 require_once __DIR__ . '/config.php';
@@ -72,7 +72,7 @@ echo "<!DOCTYPE html>
 </head>
 <body>
 <div class='setup-card'>
-    <h1>Actualización CRM: Múltiples Embudos de Venta</h1>
+    <h1>Actualización CRM: Múltiples Pipelines de Venta</h1>
 ";
 
 try {
@@ -87,8 +87,8 @@ try {
     // 2. Sembrar el primer pipeline si está vacía la tabla
     $count_pipelines = $pdo->query("SELECT COUNT(*) FROM `pipelines`")->fetchColumn();
     if ($count_pipelines == 0) {
-        $pdo->exec("INSERT INTO `pipelines` (`id`, `name`) VALUES (1, 'Embudo de Ventas Principal');");
-        echo "<div class='step success'>✔️ Primer embudo 'Embudo de Ventas Principal' sembrado (ID: 1).</div>";
+        $pdo->exec("INSERT INTO `pipelines` (`id`, `name`) VALUES (1, 'Pipeline de Ventas Principal');");
+        echo "<div class='step success'>✔️ Primer pipeline 'Pipeline de Ventas Principal' sembrado (ID: 1).</div>";
     }
 
     // 3. Agregar columna `pipeline_id` a la tabla `stages` si no existe
@@ -103,13 +103,13 @@ try {
         echo "<div class='step'>ℹ️ Columna `pipeline_id` ya existía en la tabla `stages`.</div>";
     }
 
-    // 4. Crear un segundo embudo de prueba "Logística y Despacho" si no existe
+    // 4. Crear un segundo pipeline de prueba "Logística y Despacho" si no existe
     $check_test_pipeline = $pdo->query("SELECT COUNT(*) FROM `pipelines` WHERE `id` = 2")->fetchColumn();
     if ($check_test_pipeline == 0) {
         $pdo->exec("INSERT INTO `pipelines` (`id`, `name`) VALUES (2, 'Logística y Despacho');");
-        echo "<div class='step success'>✔️ Segundo embudo 'Logística y Despacho' sembrado (ID: 2).</div>";
+        echo "<div class='step success'>✔️ Segundo pipeline 'Logística y Despacho' sembrado (ID: 2).</div>";
 
-        // Insertar etapas para el segundo embudo
+        // Insertar etapas para el segundo pipeline
         $stages_test = [
             ['Pedido Recibido', 1, 2],
             ['Preparación en Bodega', 2, 2],
@@ -120,13 +120,13 @@ try {
         foreach ($stages_test as $stg) {
             $stmt_stage->execute($stg);
         }
-        echo "<div class='step success'>✔️ Etapas de prueba sembradas para el segundo embudo.</div>";
+        echo "<div class='step success'>✔️ Etapas de prueba sembradas para el segundo pipeline.</div>";
     } else {
-        echo "<div class='step'>ℹ️ El segundo embudo 'Logística y Despacho' ya existía.</div>";
+        echo "<div class='step'>ℹ️ El segundo pipeline 'Logística y Despacho' ya existía.</div>";
     }
 
-    echo "<p style='margin-top: 1.5rem; color: #10b981; font-weight: 600;'>¡Múltiples embudos integrados con éxito en la base de datos!</p>";
-    echo "<a href='pipeline.php' class='btn-go'>Ir al Embudo Kanban</a>";
+    echo "<p style='margin-top: 1.5rem; color: #10b981; font-weight: 600;'>¡Múltiples pipelines integrados con éxito en la base de datos!</p>";
+    echo "<a href='pipeline.php' class='btn-go'>Ir al Pipeline Kanban</a>";
 
 } catch (Exception $e) {
     echo "<div class='step' style='border-left-color: #ef4444; color: #fca5a5;'>❌ Error durante la actualización: " . $e->getMessage() . "</div>";

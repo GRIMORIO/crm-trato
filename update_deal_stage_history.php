@@ -1,6 +1,6 @@
 <?php
 /**
- * update_deal_stage_history.php — Parche de BD para el timeline de embudo por negocio.
+ * update_deal_stage_history.php — Parche de BD para el timeline de pipeline por negocio.
  *
  * Crea `deal_stage_history` (una fila por cada vez que un negocio entra a una fase) y
  * la columna `deals.closed_at` (momento de conversión Ganado/Perdido). Hace un backfill
@@ -20,7 +20,7 @@ echo "<!DOCTYPE html>
 <html lang='es'>
 <head>
     <meta charset='UTF-8'>
-    <title>TIPS CRM — Historial de Fases del Embudo</title>
+    <title>TIPS CRM — Historial de Fases del Pipeline</title>
     <link href='https://fonts.googleapis.com/css2?family=Outfit:wght@300;400;500;600;700;800&display=swap' rel='stylesheet'>
     <style>
         body { background-color: #070a13; color: #f1f5f9; font-family: 'Outfit', sans-serif; padding: 3rem 1rem; display: flex; justify-content: center; align-items: center; min-height: 100vh; margin: 0; }
@@ -34,7 +34,7 @@ echo "<!DOCTYPE html>
 </head>
 <body>
 <div class='setup-card'>
-    <h1>Actualización CRM: Timeline de Embudo por Negocio</h1>
+    <h1>Actualización CRM: Timeline de Pipeline por Negocio</h1>
 ";
 
 try {
@@ -124,7 +124,7 @@ try {
         echo "<div class='step success'>✔️ Backfill: {$rows_inserted} filas de historial en " . count($deals) . " negocios; {$deals_closed} marcados con <code>closed_at</code>.</div>";
     }
 
-    echo "<p style='margin-top: 1.5rem; color: #10b981; font-weight: 600;'>¡Timeline de embudo listo!</p>";
+    echo "<p style='margin-top: 1.5rem; color: #10b981; font-weight: 600;'>¡Timeline de pipeline listo!</p>";
     echo "<a href='accounts.php' class='btn-go'>Ir al Directorio de Empresas</a>";
 
 } catch (Exception $e) {

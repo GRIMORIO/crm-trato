@@ -279,7 +279,7 @@ main {
 .stat-info .val {
     font-size: 1.5rem;
     font-weight: 700;
-    color: #fff;
+    color: var(--text-main);
 }
 
 .stat-info .lbl {
@@ -825,17 +825,26 @@ textarea:focus {
 /* ==========================================================================
    TEMA CLARO - CONTROL GENERAL DE INTERFAZ (TIPS CRM)
    ========================================================================== */
+/* Paleta de Google Workspace (Gmail/Drive/Docs) para el tema claro:
+   azul #1a73e8 como acento primario, gris neutro #dadce0/#5f6368 en
+   bordes y texto secundario, superficies blancas sobre un lienzo gris
+   muy claro #f8f9fa. Solo afecta al tema claro — el oscuro no cambia. */
 [data-theme="light"] {
-    --bg-primary: #f8fafc;
+    --bg-primary: #f8f9fa;
     --bg-secondary: #ffffff;
-    --bg-card: rgba(241, 245, 249, 0.85);
-    --bg-card-hover: rgba(226, 232, 240, 0.95);
-    --border-color: rgba(15, 23, 42, 0.08);
-    --border-hover: rgba(6, 182, 212, 0.5);
+    --bg-card: #ffffff;
+    --bg-card-hover: #f1f3f4;
+    --border-color: #dadce0;
+    --border-hover: #1a73e8;
 
-    --text-main: #0f172a;
-    --text-muted: #475569;
-    --text-dark: #64748b;
+    --text-main: #202124;
+    --text-muted: #5f6368;
+    --text-dark: #80868b;
+
+    --color-primary: #1a73e8;
+    --color-primary-rgb: 26, 115, 232;
+    --color-secondary: #34a853;
+    --color-secondary-rgb: 52, 168, 83;
 }
 
 [data-theme="light"] aside {
@@ -843,7 +852,18 @@ textarea:focus {
 }
 
 [data-theme="light"] .top-bar {
+    background-color: rgba(255, 255, 255, 0.6);
     border-bottom-color: rgba(15, 23, 42, 0.08);
+}
+
+[data-theme="light"] .btn-secondary {
+    background: rgba(15, 23, 42, 0.05);
+    color: var(--text-main);
+}
+
+[data-theme="light"] .btn-secondary:hover {
+    background: rgba(15, 23, 42, 0.1);
+    border-color: var(--color-primary);
 }
 
 [data-theme="light"] input, 
@@ -861,18 +881,33 @@ textarea:focus {
     box-shadow: 0 0 0 3px rgba(6, 182, 212, 0.15);
 }
 
-[data-theme="light"] .kanban-column {
+[data-theme="light"] .kanban-column,
+[data-theme="light"] .pipeline-column {
     background: rgba(241, 245, 249, 0.5);
     border: 1px solid rgba(15, 23, 42, 0.06);
 }
 
-[data-theme="light"] .kanban-card {
+[data-theme="light"] .pipeline-column.drag-over {
+    background-color: rgba(6, 182, 212, 0.06);
+}
+
+[data-theme="light"] .kanban-card,
+[data-theme="light"] .deal-card {
     background: #ffffff;
     box-shadow: 0 2px 4px rgba(15, 23, 42, 0.04);
 }
 
-[data-theme="light"] .kanban-card:hover {
+[data-theme="light"] .kanban-card:hover,
+[data-theme="light"] .deal-card:hover {
     box-shadow: 0 4px 8px rgba(15, 23, 42, 0.08);
+}
+
+[data-theme="light"] .column-count {
+    background-color: rgba(15, 23, 42, 0.06);
+}
+
+[data-theme="light"] .column-value {
+    border-bottom-color: rgba(15, 23, 42, 0.05);
 }
 
 [data-theme="light"] .modal-content {
@@ -892,6 +927,28 @@ textarea:focus {
 /* Ajustes de Lucide Icons e inputs en tema claro */
 [data-theme="light"] #sidebar-toggle {
     color: #0f172a !important;
+}
+
+/* Neutraliza el texto en blanco fijo heredado del tema oscuro (estilos inline
+   dispersos en las páginas del CRM). Los elementos que deben seguir en blanco
+   siempre (badges/avatares con degradado, chips de fondo negro fijo) llevan su
+   propio "color:#fff !important" en el HTML, que gana sobre esta regla porque
+   un !important inline tiene mayor prioridad que uno de hoja de estilos. */
+[data-theme="light"] [style*="color:#fff"],
+[data-theme="light"] [style*="color: #fff"],
+[data-theme="light"] [style*="color:#FFF"],
+[data-theme="light"] [style*="color: #FFF"],
+[data-theme="light"] [style*="color:#ffffff"],
+[data-theme="light"] [style*="color: #ffffff"] {
+    color: var(--text-main) !important;
+}
+
+/* Mismo problema pero de fondo: tarjetas que usaban un blanco al 2-3% de opacidad
+   para "asomar" levemente sobre el fondo oscuro quedan prácticamente invisibles
+   sobre un fondo ya blanco. */
+[data-theme="light"] [style*="rgba(255,255,255,0.02)"],
+[data-theme="light"] [style*="rgba(255,255,255,0.03)"] {
+    background: var(--bg-card) !important;
 }
 
 /* ==========================================================================

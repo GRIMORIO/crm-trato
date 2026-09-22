@@ -2,7 +2,7 @@
 /**
  * account.php — Ficha 360 de una empresa B2B.
  *
- * Timeline del embudo por negocio (días por fase hasta la conversión), resumen del
+ * Timeline del pipeline por negocio (días por fase hasta la conversión), resumen del
  * negocio, panel de actividades y log de contacto. Se abre desde el nombre de la
  * empresa en accounts.php (?id=<account_id>, opcional &deal=<deal_id>).
  * Los datos se cargan con api.php?action=get_account_detail.
@@ -48,7 +48,7 @@ require_once __DIR__ . '/includes/header.php';
             <div class="deal-condition" id="deal-condition"></div>
         </div>
         <div id="no-deals" style="display:none; padding:1.5rem; text-align:center; color:var(--text-muted);">
-            Esta empresa todavía no tiene negocios en el embudo.
+            Esta empresa todavía no tiene negocios en el pipeline.
         </div>
     </div>
 
@@ -310,7 +310,7 @@ require_once __DIR__ . '/includes/header.php';
         link.href = `https://wa.me/${phone}?text=` + encodeURIComponent('Hola ' + (deal.first_name || '') + ', le saludo de TIPS S.A.');
     }
 
-    // ---- Timeline del embudo ----
+    // ---- Timeline del pipeline ----
     function stageDurations(deal) {
         // Devuelve {stageId: totalMs, firstEntry: Date, lastEntry: Date} a partir del historial.
         let hist = (DATA.stage_history || []).filter(h => h.deal_id === deal.id)
@@ -360,7 +360,7 @@ require_once __DIR__ . '/includes/header.php';
                 ${badge}
             </div>`;
         }).join('');
-        document.getElementById('deal-timeline').innerHTML = nodes || '<p style="color:var(--text-muted);">Este embudo no tiene fases configuradas.</p>';
+        document.getElementById('deal-timeline').innerHTML = nodes || '<p style="color:var(--text-muted);">Este pipeline no tiene fases configuradas.</p>';
 
         const totalDays = daysBetween(firstEntry, end);
         let condBadge;
@@ -374,8 +374,8 @@ require_once __DIR__ . '/includes/header.php';
 
         document.getElementById('deal-condition').innerHTML = `
             ${condBadge}
-            <span>Ingreso al embudo: <strong>${fmtDate(DATA.stage_history.filter(h=>h.deal_id===deal.id)[0]?.entered_at || deal.created_at)}</strong></span>
-            <span>${isWon || isLost ? 'Duración total' : 'En el embudo'}: <strong>${dayLabel(totalDays)}</strong></span>
+            <span>Ingreso al pipeline: <strong>${fmtDate(DATA.stage_history.filter(h=>h.deal_id===deal.id)[0]?.entered_at || deal.created_at)}</strong></span>
+            <span>${isWon || isLost ? 'Duración total' : 'En el pipeline'}: <strong>${dayLabel(totalDays)}</strong></span>
             ${closedTxt}
         `;
     }
@@ -412,7 +412,7 @@ require_once __DIR__ . '/includes/header.php';
     }
 
     function renderSummaryNoDeal() {
-        document.getElementById('summary-deal').innerHTML = '<p style="font-size:0.85rem; color:var(--text-dark);">Sin negocios en el embudo para esta empresa.</p>';
+        document.getElementById('summary-deal').innerHTML = '<p style="font-size:0.85rem; color:var(--text-dark);">Sin negocios en el pipeline para esta empresa.</p>';
         const c = DATA.contacts[0];
         document.getElementById('summary-contact').innerHTML = c
             ? row('Nombre', esc(c.first_name + ' ' + c.last_name)) + row('Cargo', esc(c.job_title || '—')) + row('Teléfono', esc(c.phone || '—')) + row('Correo', esc(c.email || '—'))
